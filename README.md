@@ -157,7 +157,7 @@ JSP/Servlet 기반의 의류 쇼핑몰 웹 프로젝트입니다.
 ---
 
 ## 프로젝트 구조 예시
-
+```text
 shopping-mall-project
 ├── src
 │   └── main
