@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+    version="6.0">
+
+    <display-name>Archetype Created Web Application</display-name>
+    <servlet>
+        <servlet-name>jsp</servlet-name>
+        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+        <multipart-config>
+            <location>C:\upload</location> <!-- 임시 저장 경로 -->
+            <max-file-size>20971520</max-file-size> <!-- 파일 한 개 최대 (예: 20MB) -->
+            <max-request-size>41943040</max-request-size> <!-- 전체 요청 최대 (예: 40MB) -->
+            <file-size-threshold>0</file-size-threshold> <!-- 메모리 임계값 -->
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jsp</servlet-name>
+        <url-pattern>*.jsp</url-pattern>
+    </servlet-mapping>
+    <error-page>
+        <!--<error-code>500</error-code> 에러코드 사용방식 -->
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/ch11/exceptionType_error.jsp</location>
+    </error-page>
+</web-app>
