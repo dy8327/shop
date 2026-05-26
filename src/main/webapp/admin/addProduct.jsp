@@ -1,13 +1,13 @@
-<%@ page contentType = "text/html; charset = utf-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset = utf-8" pageEncoding="UTF-8" %>
 <html>
 <head>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script type="text/javascript" src="./resources/js/validation.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/validation.js"></script>
 <title>상품 등록</title>
 </head>
 <body>
 <div class="container py-4">
-    <%@ include file="/admin/menu.jsp" %>
+    <%@ include file="/admin/adminMenu.jsp" %>
 
     <div class="p-5 mb-4 bg-body-tertiary rounded-3">
         <div class="container-fluid py-5">
@@ -18,7 +18,7 @@
 
     <div class="row align-items-md-stretch">
         <p></p>
-        <form name="newProduct" action="./processAddProduct.jsp" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <form name="newProduct" action="${pageContext.request.contextPath}/admin/processAddProduct.jsp" method="post" class="form-horizontal" enctype="multipart/form-data">
             <div class="mb-3 row">
                 <label class="col-sm-2">상품명</label>
                 <div class="col-sm-3">
