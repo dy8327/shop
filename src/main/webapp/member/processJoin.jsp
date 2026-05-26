@@ -23,8 +23,8 @@
         pstmt.setString(5, memEmail);
 
         pstmt.executeUpdate();
-
-        response.sendRedirect("../index.jsp");
+        
+        response.sendRedirect("joinResult.jsp");
     } catch (Exception e){
         out.println("회원가입 오류: " + e. getMessage());
     } finally {
