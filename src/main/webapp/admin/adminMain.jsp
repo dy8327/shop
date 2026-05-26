@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<%@ include file="/admin/menu.jsp" %>
+<%@ include file="/admin/adminMenu.jsp" %>
 
 <main class="join-container">
 전체 등록 상품 수량
