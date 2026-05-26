@@ -27,7 +27,7 @@
   </div>
 
   <a href="${pageContext.request.contextPath}/cart.jsp">🛒</a>
-  <a href="${pageContext.request.contextPath}/login.jsp">로그인</a>
+  <a href="${pageContext.request.contextPath}/member/login.jsp">로그인</a>
 </div>
 
 </header>
