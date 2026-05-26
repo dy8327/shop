@@ -1,4 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.sql.*" %>
+<%@ include file="dbconn.jsp" %>
+
+<%
+PreparedStatement pstmt = null;
+ResultSet rs = null;
+
+String sql = "SELECT PRO_ID, PRO_NAME, PRO_PRICE, PRO_IMG " +
+             "FROM PRODUCTS " +
+             "ORDER BY PRO_DATE DESC";
+
+pstmt = conn.prepareStatement(sql);
+rs = pstmt.executeQuery();
+%>
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -9,7 +24,7 @@
 
 <body>
 
-<%@ include file="../menu.jsp" %>
+<%@ include file="menu.jsp" %>
 
 <section class="hero">
   <div>
@@ -27,29 +42,33 @@
 
   <div class="grid">
 
-    <a class="card" href="detail.jsp?id=1">
-      <img class="main-img" src="${pageContext.request.contextPath}/images/orola_crp_hood.png" alt="오로라 크롭 후드">
-      <em>NEW</em><button>♡</button>
-      <b>오로라 크롭 후드</b><p>39,000원</p>
-    </a>
+    <%
+      while(rs.next()) {
+        int id = rs.getInt("PRO_ID");
+        String name = rs.getString("PRO_NAME");
+        int price = rs.getInt("PRO_PRICE");
+        String img = rs.getString("PRO_IMG");
+    %>
 
-    <a class="card" href="detail.jsp?id=2">
-      <img class="main-img" src="${pageContext.request.contextPath}/images/over_t.png" alt="유니버스 오버핏 티셔츠">
-      <em>NEW</em><button>♡</button>
-      <b>유니버스 오버핏 티셔츠</b><p>22,000원</p>
-    </a>
+    <!-- 🔥 여기만 수정됨 -->
+    <a class="card"
+       href="${pageContext.request.contextPath}/product/product.jsp?proId=<%= id %>">
 
-    <a class="card" href="detail.jsp?id=3">
-      <img class="main-img" src="${pageContext.request.contextPath}/images/wide_denim.png" alt="코스믹 와이드 데님">
+      <img class="main-img"
+           src="${pageContext.request.contextPath}/images/<%= img %>"
+           alt="<%= name %>">
+
+      <em>NEW</em>
       <button>♡</button>
-      <b>코스믹 와이드 데님</b><p>45,000원</p>
+
+      <b><%= name %></b>
+      <p><%= String.format("%,d", price) %>원</p>
+
     </a>
 
-    <a class="card" href="detail.jsp?id=4">
-      <img class="main-img" src="${pageContext.request.contextPath}/images/one.png" alt="스타라잇 나시 원피스">
-      <button>♡</button>
-      <b>스타라잇 나시 원피스</b><p>36,000원</p>
-    </a>
+    <%
+      }
+    %>
 
   </div>
 </section>
@@ -59,6 +78,14 @@
   <p>눈부신 컬러로 완성하는 나의 우주</p>
   <a class="light" href="${pageContext.request.contextPath}/list.jsp">컬렉션 보러가기 →</a>
 </section>
+
+<%
+try {
+    if(rs != null) rs.close();
+    if(pstmt != null) pstmt.close();
+    if(conn != null) conn.close();
+} catch(Exception e) {}
+%>
 
 <%@ include file="footer.jsp" %>
 
