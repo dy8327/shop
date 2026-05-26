@@ -1,7 +1,8 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <footer class="pt-3 mt-4 text-body-secondary border-top">
-  &copy; MUSINSA ALL RIGHTS RESERVED
+  &copy; SSU ALL RIGHTS RESERVED <br>
 
-  (주) 무신사 | 대표자 : 조만호, 조남성 | 주소 : 서울특별시 성동구 아차산로 13길 11 ...
+  SSU | 대표자 : 곽지윤, 류도영 | 주소 : 대전광역시 서구 대덕대로 182. 1001호<br>
 
   개인정보처리방침 · 이용약관 · 결제대행 위탁사 · 분쟁해결기준
 </footer>
