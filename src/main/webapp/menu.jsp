@@ -2,6 +2,7 @@
 <%
     String loginId = (String) session.getAttribute("memId");
     String loginName = (String) session.getAttribute("memName");
+    String loginRole = (String) session.getAttribute("memRole");
 %>
 
 <header class="nav">
@@ -27,9 +28,13 @@
         <span><%=loginName %>님</span>
   <h4><a href="${pageContext.request.contextPath}/cart.jsp">🛒</a></h4>
   <a href="${pageContext.request.contextPath}/member/logout.jsp">로그아웃</a>
+  <% if ("ADMIN".equals(loginRole)) { %>
+            <a href="<%= request.getContextPath() %>/admin/adminMain.jsp">관리자 모드</a>
+        <% } %>
     <%
         }
     %>
+    
 </div>
 
 </header>
