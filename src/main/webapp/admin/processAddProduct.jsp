@@ -3,29 +3,31 @@
 <%@ page import="java.io.*" %>
 <%@ page import="jakarta.servlet.http.*" %>
 <%@ page import="java.sql.*" %>
-<%@ page import="com.oreilly.servlet.*" %>
-<%@ page import="com.oreilly.servlet.multipart.*" %>
 <%@ include file="../dbconn.jsp" %>
 
 <%
     request.setCharacterEncoding("UTF-8");
 
-    String realFolder = request.getServletContext().getRealPath("/images");
-    int maxSize=5*1024*1024;
-    String encType="UTF-8";
-
-    MultipartRequest multi = new MultipartRequest(
-        request, realFolder, maxSize, encType, new DefaultFileRenamePolicy()
-    );
-
-    String proName=multi.getParameter("proName");
-    int proPrice=Integer.parseInt(multi.getParameter("proPrice"));
+    
+    String proName=request.getParameter("proName");
+    int proPrice=Integer.parseInt(request.getParameter("proPrice"));
     String proSize=request.getParameter("proSize");
-    int proStock=Integer.parseInt(multi.getParameter("proStock"));
-    String proColor=multi.getParameter("proColor");
-    String proCont=multi.getParameter("proCont");
-    String proCategory=multi.getParameter("proCategory");
-    String filename=multi.getFilesystemName("filename");
+    int proStock=Integer.parseInt(request.getParameter("proStock"));
+    String proColor=request.getParameter("proColor");
+    String proCont=request.getParameter("proCont");
+    String proCategory=request.getParameter("proCategory");
+    String filename="";
+
+    Part filepart = request.getPart("filename");
+
+    if(filePart != null && filePart.getSize()>0){
+        filename=filePart.getSubmittedFileName();
+
+        String uploadPath=request.getServletContext().getRealPath("/images");
+
+        File uploadDir=new File(uploadPath);
+        
+    }
 
     //DB 정보저장
     PreparedStatement pstmt=null;
