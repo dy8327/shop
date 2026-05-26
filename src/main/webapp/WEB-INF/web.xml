@@ -4,7 +4,29 @@
     xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
     version="6.0">
 
-    <display-name>Archetype Created Web Application</display-name>
+    <display-name>SSU Shopping Mall</display-name>
+    <filter>
+        <filter-name>LogFileFilter</filter-name>
+        <filter-class>filter.LogFileFilter</filter-class>
+        <init-param>
+            <param-name>filename</param-name>
+            <param-value>c:\\logs\\ssuShop.log</param-value>
+        </init-param>
+      </filter>
+      <filter>
+        <filter-name>AdminCheckFilter</filter-name>
+        <filter-class>filter.AdminCheckFilter</filter-class>
+    </filter>
+
+      <filter-mapping>
+        <filter-name>LogFileFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+      </filter-mapping>
+      <filter-mapping>
+        <filter-name>AdminCheckFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>jsp</servlet-name>
         <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
