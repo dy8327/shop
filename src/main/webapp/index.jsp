@@ -3,34 +3,13 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>LUNA RAIN</title>
+  <title>SSU</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
 
-<header class="nav">
-  <b>SSU</b>
-
-  <a href="${pageContext.request.contextPath}/new.jsp">NEW</a>
-  <a href="${pageContext.request.contextPath}/best.jsp">BEST</a>
-  <a href="${pageContext.request.contextPath}/list.jsp">ALLCLOTHING</a>
-  <a href="${pageContext.request.contextPath}/top.jsp">TOP</a>
-  <a href="${pageContext.request.contextPath}/bottom.jsp">BOTTOM</a>
-  <a href="${pageContext.request.contextPath}/dress.jsp">DRESS</a>
-  <a href="${pageContext.request.contextPath}/acc.jsp">ACC</a>
-
- <div class="right-area">
-  <div class="search-area">
-    <input type="text" name="search">
-    <a href="${pageContext.request.contextPath}/search.jsp">⌕</a>
-  </div>
-
-  <a href="${pageContext.request.contextPath}/cart.jsp">🛒</a>
-  <a href="${pageContext.request.contextPath}/member/login.jsp">로그인</a>
-</div>
-
-</header>
+<%@ include file="../menu.jsp" %>
 
 <section class="hero">
   <div>
