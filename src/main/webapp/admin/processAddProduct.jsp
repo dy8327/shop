@@ -18,7 +18,7 @@
     String proCategory=request.getParameter("proCategory");
     String filename="";
 
-    Part filepart = request.getPart("filename");
+    Part filePart = request.getPart("filename");
 
     if(filePart != null && filePart.getSize()>0){
         filename=filePart.getSubmittedFileName();
@@ -26,6 +26,10 @@
         String uploadPath=request.getServletContext().getRealPath("/images");
 
         File uploadDir=new File(uploadPath);
+        if(!uploadDir.exists()){
+            uploadDir.mkdirs();
+        }
+        filePart.write(uploadPath+File.separator+filename);
         
     }
 
@@ -49,7 +53,7 @@
 
             String productSql=
             "INSERT INTO PRODUCTS "+
-            "(PRO_ID, PRO_NAME, PRO_PRICE, PRO_CONT, PRO_CATEGORY, PRO_IMG) "+
+            "(PRO_ID, PRO_NAME, PRO_PRICE, PRO_CONTENT, PRO_CATEGORY, PRO_IMG) "+
             "VALUES(?, ?, ?, ?, ?, ?)";
 
             pstmt=conn.prepareStatement(productSql);
@@ -65,7 +69,7 @@
             String optionSql=
             "INSERT INTO PRO_OPTION "+
             "(OPTION_ID, PRO_ID, PRO_SIZE, PRO_COLOR, PRO_STOCK) "+
-            "VALUES(SEQ_PRODUCTSOPTION.NEXTVAL, ?, ?, ?, ?)";
+            "VALUES(SEQ_PRODUCTS_OPTION.NEXTVAL, ?, ?, ?, ?)";
 
             pstmt=conn.prepareStatement(optionSql);
             pstmt.setInt(1, proId);
@@ -76,7 +80,13 @@
             conn.commit();
 
             response.sendRedirect("adminMain.jsp");
-        } finally{
+        } catch (Exception e){
+            if (conn!=null){
+                conn.rollback();
+            }
+            out.println("상품등록 오류: "+e.getMessage());
+        } 
+        finally{
             if(rs!=null)
                 rs.close();
             if(pstmt!=null)
