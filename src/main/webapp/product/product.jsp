@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ include file="../dbconn.jsp" %>
 
 <%
@@ -13,17 +14,15 @@ if (proId == null || proId.equals("")) {
 }
 
 PreparedStatement pstmt = null;
-PreparedStatement colorStmt = null;
-PreparedStatement sizeStmt = null;
-
 ResultSet rs = null;
-ResultSet colorRs = null;
-ResultSet sizeRs = null;
 
 String name = "";
 int price = 0;
 String img = "";
 String content = "";
+
+ArrayList<String> colors = new ArrayList<>();
+ArrayList<String> sizes = new ArrayList<>();
 
 try {
 
@@ -49,21 +48,22 @@ try {
     img = rs.getString("PRO_IMG");
     content = rs.getString("PRO_CONTENT");
 
-    // =====================
-    // 옵션 (COLOR)
-    // =====================
-    String colorSql = "SELECT DISTINCT PRO_COLOR FROM PRO_OPTION WHERE PRO_ID = ?";
-    colorStmt = conn.prepareStatement(colorSql);
-    colorStmt.setInt(1, Integer.parseInt(proId));
-    colorRs = colorStmt.executeQuery();
 
     // =====================
-    // 옵션 (SIZE)
+    // 옵션 (COLOR + SIZE)
     // =====================
-    String sizeSql = "SELECT DISTINCT PRO_SIZE FROM PRO_OPTION WHERE PRO_ID = ?";
-    sizeStmt = conn.prepareStatement(sizeSql);
-    sizeStmt.setInt(1, Integer.parseInt(proId));
-    sizeRs = sizeStmt.executeQuery();
+    String optSql = "SELECT PRO_COLOR, PRO_SIZE FROM PRO_OPTION WHERE PRO_ID = ?";
+    PreparedStatement optStmt = conn.prepareStatement(optSql);
+    optStmt.setInt(1, Integer.parseInt(proId));
+    ResultSet optRs = optStmt.executeQuery();
+
+    while(optRs.next()) {
+        String color = optRs.getString("PRO_COLOR");
+        String size = optRs.getString("PRO_SIZE");
+
+        if(!colors.contains(color)) colors.add(color);
+        if(!sizes.contains(size)) sizes.add(size);
+    }
 
 } catch(Exception e) {
     out.println("에러: " + e.getMessage());
@@ -83,7 +83,6 @@ try {
 
 <body class="soft">
 
-<!-- HEADER 그대로 유지 -->
 <header class="nav purple">
 
   <b>COSMIC MALL</b>
@@ -107,52 +106,47 @@ try {
 
   <section class="detail-grid">
 
-    <!-- 이미지 (그대로 유지) -->
     <div>
       <img class="main-img"
            src="${pageContext.request.contextPath}/images/<%= img %>"
            alt="<%= name %>">
     </div>
 
-    <!-- 정보 -->
     <div class="info">
 
-      <!-- 상품명/가격만 DB -->
       <h1><%= name %></h1>
       <h2><%= price %>원</h2>
 
-      <!-- 리뷰 (고정 유지) -->
       <p>★ 4.8 (128)</p>
 
-      <!-- COLOR (UI 유지 + DB만 적용) -->
+      <!-- COLOR -->
       <label>COLOR</label>
       <div>
         <%
-          while(colorRs.next()) {
+        for(String c : colors) {
         %>
           <button class="color">
-            <%= colorRs.getString("PRO_COLOR") %>
+            <%= c %>
           </button>
         <%
-          }
+        }
         %>
       </div>
 
-      <!-- SIZE (UI 유지 + DB만 적용) -->
+      <!-- SIZE -->
       <label>SIZE</label>
       <div>
         <%
-          while(sizeRs.next()) {
+        for(String s : sizes) {
         %>
           <button class="size">
-            <%= sizeRs.getString("PRO_SIZE") %>
+            <%= s %>
           </button>
         <%
-          }
+        }
         %>
       </div>
 
-      <!-- 수량 (그대로 유지) -->
       <label>수량</label>
       <div>
         <button class="size">-</button>
@@ -160,10 +154,19 @@ try {
         <button class="size">+</button>
       </div>
 
-      <!-- 버튼 (그대로 유지) -->
-      <button class="btn wide" onclick="openConfirm()">
-        장바구니 담기
-      </button>
+      <form action="addCart.jsp" method="post">
+
+        <input type="hidden" name="proId" value="<%= proId %>">
+
+       
+
+        <input type="hidden" name="quantity" value="1">
+
+        <button type="submit" class="btn wide">
+            장바구니 담기
+        </button>
+
+      </form>
 
       <button class="dark wide">
         바로 구매하기
@@ -173,7 +176,6 @@ try {
 
   </section>
 
-  <!-- 탭 (그대로 유지) -->
   <div class="tabs">
     <button>상품 정보</button>
     <button>사이즈 가이드</button>
@@ -181,7 +183,6 @@ try {
     <button>리뷰 (128)</button>
   </div>
 
-  <!-- 설명 (DB만 변경) -->
   <section class="desc">
     <p><%= content %></p>
 
@@ -194,7 +195,6 @@ try {
 
 </main>
 
-<!-- 모달 (그대로 유지) -->
 <div class="modal-bg" id="confirmModal">
   <div class="modal">
     <div class="circle">🛒</div>
