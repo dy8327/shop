@@ -76,12 +76,13 @@ for(Shop item : cartList){
     <td><%= sum %>원</td>
 
     <!-- ⭐ 개별 삭제 -->
-    <td>
-       <a href="removeCart.jsp?proId=<%=item.getProId()%>&color=<%=item.getProColor()%>&size=<%=item.getProSize()%>"
-   onclick="return confirm('삭제하시겠습니까?')">
+  <td>
+   <a href="removeCart.jsp?proId=<%=item.getProId()%>&proOpId=<%=item.getProOpId()%>"
+      onclick="return confirm('삭제하시겠습니까?')">
+
         삭제
-       </a>
-    </td>
+   </a>
+</td>
 
 </tr>
 

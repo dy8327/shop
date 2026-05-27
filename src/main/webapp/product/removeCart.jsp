@@ -5,8 +5,7 @@
 
 <%
 int proId = Integer.parseInt(request.getParameter("proId"));
-String color = request.getParameter("color");
-String size = request.getParameter("size");
+int proOpId = Integer.parseInt(request.getParameter("proOpId"));
 
 ArrayList<Shop> cartList =
 (ArrayList<Shop>) session.getAttribute("cartList");
@@ -17,9 +16,8 @@ if (cartList != null) {
 
         Shop item = cartList.get(i);
 
-        if (item.getProId() == proId &&
-            item.getProColor().equals(color) &&
-            item.getProSize().equals(size)) {
+       if (item.getProId() == proId &&
+           item.getProOpId() == proOpId) {
 
             cartList.remove(i);
             break;
