@@ -128,6 +128,10 @@ background-position: center !important;
 .join-btn:hover {
   background-color: #333;
 }
+.admin-wrap {
+  width: 90%;
+  margin: 40px auto;
+}
 
 /*상품상세 컬러,사이즈*/
 .color,
