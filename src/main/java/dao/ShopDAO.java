@@ -71,6 +71,7 @@ public class ShopDAO {
         pstmt.setInt(1, proId);
         pstmt.executeUpdate();
         pstmt.close();
+        pstmt = null;
         
         String prosql="DELETE FROM PRODUCTS WHERE PRO_ID=?";
         pstmt=conn.prepareStatement(prosql);
@@ -110,6 +111,7 @@ public class ShopDAO {
             pstmt.setInt(6, shop.getProId());
             pstmt.executeUpdate();
             pstmt.close();
+            pstmt = null;
 
             String optionSql=
             "UPDATE PRO_OPTION SET "+
@@ -134,4 +136,67 @@ public class ShopDAO {
             }
         }
     }
+
+    public void insertProduct(Connection conn, Shop shop) throws Exception{
+
+        PreparedStatement pstmt=null;
+        ResultSet rs= null;
+        
+            try{
+                conn.setAutoCommit(false);
+                int proId=0;
+    
+                String seqSql="SELECT SEQ_PRODUCTS.NEXTVAL FROM DUAL";
+                pstmt=conn.prepareStatement(seqSql);
+                rs=pstmt.executeQuery();
+    
+                if(rs.next()){
+                    proId=rs.getInt(1);
+                }
+                rs.close();
+                rs = null;
+                pstmt.close();
+                pstmt = null;
+    
+                String productSql=
+                "INSERT INTO PRODUCTS "+
+                "(PRO_ID, PRO_NAME, PRO_PRICE, PRO_CONTENT, PRO_CATEGORY, PRO_IMG) "+
+                "VALUES(?, ?, ?, ?, ?, ?)";
+    
+                pstmt=conn.prepareStatement(productSql);
+                pstmt.setInt(1, proId);
+                pstmt.setString(2, shop.getProName());
+                pstmt.setInt(3, shop.getProPrice());
+                pstmt.setString(4, shop.getProCont());
+                pstmt.setString(5, shop.getProCategory());
+                pstmt.setString(6, shop.getProImg());
+                pstmt.executeUpdate();
+                pstmt.close();
+                pstmt = null;
+    
+                String optionSql=
+                "INSERT INTO PRO_OPTION "+
+                "(OPTION_ID, PRO_ID, PRO_SIZE, PRO_COLOR, PRO_STOCK) "+
+                "VALUES(SEQ_PRODUCTS_OPTION.NEXTVAL, ?, ?, ?, ?)";
+    
+                pstmt=conn.prepareStatement(optionSql);
+                pstmt.setInt(1, proId);
+                pstmt.setString(2, shop.getProSize());
+                pstmt.setString(3, shop.getProColor());
+                pstmt.setInt(4, shop.getProStock());
+                pstmt.executeUpdate();
+                conn.commit();
+    }catch(Exception e) {
+        conn.rollback();
+        throw e;
+
+    } finally {
+        if(rs != null)
+            rs.close();
+
+        if(pstmt != null)
+            pstmt.close();
+    }
+
+}
 }
