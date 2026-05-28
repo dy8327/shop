@@ -83,9 +83,9 @@ try {
 
 <body class="soft">
 
-<header class="nav purple">
+<%--<header class="nav purple">
 
-  <b>COSMIC MALL</b>
+  <b>SSU</b>
 
   <a href="${pageContext.request.contextPath}/index.jsp">HOME</a>
   <a href="${pageContext.request.contextPath}/product/products.jsp">CLOTHING</a>
@@ -96,7 +96,8 @@ try {
     <a href="${pageContext.request.contextPath}/cart.jsp">🛒</a>
   </div>
 
-</header>
+</header>--%>
+<%@ include file="../menu.jsp" %>
 
 <main class="detail">
 
