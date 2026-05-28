@@ -22,7 +22,7 @@
     <a href="${pageContext.request.contextPath}/wish.jsp">♡</a>
 
     <!-- 장바구니 -->
-    <a href="${pageContext.request.contextPath}/cart.jsp">🛒</a>
+    <a href="${pageContext.request.contextPath}/product/cart.jsp">🛒</a>
 
   </div>
 
