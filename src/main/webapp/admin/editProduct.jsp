@@ -39,7 +39,7 @@
             <h5><b><%=rs.getString("PRO_NAME") %></b></h5>
             <p><%=rs.getString("PRO_COLOR") %>
             <p><%=rs.getString("PRO_SIZE") %>
-            <P><%=rs.getString("PRO_PRICE") %>원 | 재고<%=rs.getString("PRO_STOCK") %>개
+            <P><%=rs.getString("PRO_PRICE") %>원 | 재고<%=rs.getString("PRO_STOCK") %>개</p>
             <p><%
                 if("update".equals(edit)){
                 %>
@@ -47,7 +47,7 @@
             <%
                 } else if("delete".equals(edit)){
             %>
-            <a href="./deleteProduct.jsp?id=<%=rs.getString("PRO_ID") %>" onclick="return Confirm('정말 삭제하시겠습니까?')" class="btn btn-danger" role="button">삭제 &raquo;</a>
+            <a href="./deleteProduct.jsp?id=<%=rs.getString("PRO_ID") %>" onclick="return confirm('정말 삭제하시겠습니까?')" class="btn btn-danger" role="button">삭제 &raquo;</a>
             <%
                 }
             %>
