@@ -7,14 +7,21 @@ function closeConfirm() {
 }
 
 function showDone() {
-  // confirm 모달 닫기
   closeConfirm();
 
-  // 장바구니 저장 (서버 요청)
-  document.getElementById('cartForm').submit();
-
-  // 완료 모달 띄우기
-  document.getElementById('doneModal').classList.add('show');
+  fetch("addCart.jsp", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({
+      proId: document.querySelector('input[name="proId"]').value,
+      quantity: document.querySelector('input[name="quantity"]').value
+    })
+  })
+  .then(() => {
+    document.getElementById('doneModal').classList.add('show');
+  });
 }
 
 function closeDone() {
@@ -25,3 +32,5 @@ function closeDone() {
 function goCart() {
   window.location.href = "/cart.jsp";
 }
+
+

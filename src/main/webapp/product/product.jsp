@@ -83,20 +83,6 @@ try {
 
 <body class="soft">
 
-<%--<header class="nav purple">
-
-  <b>SSU</b>
-
-  <a href="${pageContext.request.contextPath}/index.jsp">HOME</a>
-  <a href="${pageContext.request.contextPath}/product/products.jsp">CLOTHING</a>
-
-  <div class="right-area">
-    <a href="${pageContext.request.contextPath}/search.jsp">⌕</a>
-    <a href="${pageContext.request.contextPath}/wish.jsp">♡</a>
-    <a href="${pageContext.request.contextPath}/cart.jsp">🛒</a>
-  </div>
-
-</header>--%>
 <%@ include file="../menu.jsp" %>
 
 <main class="detail">
@@ -155,7 +141,7 @@ try {
         <button class="size">+</button>
       </div>
 
-      <form action="addCart.jsp" method="post">
+      <form id="cartForm">
 
         <input type="hidden" name="proId" value="<%= proId %>">
 
@@ -163,9 +149,9 @@ try {
 
         <input type="hidden" name="quantity" value="1">
 
-        <button type="submit" class="btn wide">
-            장바구니 담기
-        </button>
+       <button type="button" class="btn wide" onclick="openConfirm()">
+        장바구니 담기
+       </button>
 
       </form>
 
@@ -209,14 +195,16 @@ try {
   <div class="modal">
     <div class="circle check">✓</div>
     <h3>장바구니에 추가되었습니다.</h3>
-    <a class="btn" href="${pageContext.request.contextPath}/cart.jsp">
-      장바구니 보기
-    </a>
+   <a class="btn"
+   href="${pageContext.request.contextPath}/product/cart.jsp"
+   onclick="closeDone()">
+  장바구니 보기
+</a>
     <button class="outline" onclick="closeDone()">쇼핑 계속하기</button>
   </div>
 </div>
 
-<script src="${pageContext.request.contextPath}/js/product.js"></script>
+<script src="${pageContext.request.contextPath}/js2/product.js"></script>
 
 <%@ include file="../footer.jsp" %>
 
