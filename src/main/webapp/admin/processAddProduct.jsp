@@ -1,8 +1,8 @@
-<%@ page contentType="text/html; charset = utf-8" pageEncoding="UTF-8" %>
-<%@ page import="dto.Shop" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.io.*" %>
+<%@ page import="dto.Shop" %>
+<%@ page import="dao.ShopDAO" %>
 <%@ page import="jakarta.servlet.http.*" %>
-<%@ page import="java.sql.*" %>
 <%@ include file="../dbconn.jsp" %>
 
 <%
@@ -34,63 +34,24 @@
     }
 
     //DB 정보저장
-    PreparedStatement pstmt=null;
-    ResultSet rs= null;
-    
+    Shop shop = new Shop();
+    shop.setProName(proName);
+    shop.setProPrice(proPrice);
+    shop.setProSize(proSize);
+    shop.setProStock(proStock);
+    shop.setProColor(proColor);
+    shop.setProCont(proCont);
+    shop.setProCategory(proCategory);
+    shop.setProImg(filename);
+
         try{
-            conn.setAutoCommit(false);
-            int proId=0;
-
-            String seqSql="SELECT SEQ_PRODUCTS.NEXTVAL FROM DUAL";
-            pstmt=conn.prepareStatement(seqSql);
-            rs=pstmt.executeQuery();
-
-            if(rs.next()){
-                proId=rs.getInt(1);
-            }
-            rs.close();
-            pstmt.close();
-
-            String productSql=
-            "INSERT INTO PRODUCTS "+
-            "(PRO_ID, PRO_NAME, PRO_PRICE, PRO_CONTENT, PRO_CATEGORY, PRO_IMG) "+
-            "VALUES(?, ?, ?, ?, ?, ?)";
-
-            pstmt=conn.prepareStatement(productSql);
-            pstmt.setInt(1, proId);
-            pstmt.setString(2, proName);
-            pstmt.setInt(3, proPrice);
-            pstmt.setString(4, proCont);
-            pstmt.setString(5, proCategory);
-            pstmt.setString(6, filename);
-            pstmt.executeUpdate();
-            pstmt.close();
-
-            String optionSql=
-            "INSERT INTO PRO_OPTION "+
-            "(OPTION_ID, PRO_ID, PRO_SIZE, PRO_COLOR, PRO_STOCK) "+
-            "VALUES(SEQ_PRODUCTS_OPTION.NEXTVAL, ?, ?, ?, ?)";
-
-            pstmt=conn.prepareStatement(optionSql);
-            pstmt.setInt(1, proId);
-            pstmt.setString(2, proSize);
-            pstmt.setString(3, proColor);
-            pstmt.setInt(4, proStock);
-            pstmt.executeUpdate();
-            conn.commit();
-
-            response.sendRedirect("adminMain.jsp");
-        } catch (Exception e){
-            if (conn!=null){
-                conn.rollback();
-            }
+        ShopDAO dao = new ShopDAO();
+        dao.insertProduct(conn, shop);
+        response.sendRedirect("adminMain.jsp");
+    } catch (Exception e){
             out.println("상품등록 오류: "+e.getMessage());
         } 
         finally{
-            if(rs!=null)
-                rs.close();
-            if(pstmt!=null)
-                pstmt.close();
             if(conn!=null)
                 conn.close();
         }
