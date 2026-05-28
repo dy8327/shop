@@ -18,7 +18,7 @@ rs = pstmt.executeQuery();
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>SSU</title>
+
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 

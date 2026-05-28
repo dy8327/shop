@@ -80,18 +80,6 @@ try {
   <p><%= rs.getInt("PRO_PRICE") %>원</p>
 
 </a>
-
-<a class="card"
-   href="product.jsp?proId=<%= rs.getInt("PRO_ID") %>">
-
-  <img class="main-img"
-       src="<%=request.getContextPath()%>/images/<%= rs.getString("PRO_IMG") %>">
-
-  <b><%= rs.getString("PRO_NAME") %></b>
-  <p><%= rs.getInt("PRO_PRICE") %>원</p>
-
-</a>
-
 <%
 }
 

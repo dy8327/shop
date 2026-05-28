@@ -26,7 +26,10 @@ int totalPrice = 0;
 
 <!-- HEADER -->
 <header class="nav purple">
-    <b>COSMIC MALL</b>
+   <b onclick="location.href='${pageContext.request.contextPath}/index.jsp'"
+   style="cursor:pointer;">
+   SSU
+   </b>
     <span class="right">⌕ ♡ 🛒</span>
 </header>
 
