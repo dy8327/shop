@@ -12,7 +12,7 @@
 
 <body class="soft">
 
-<%@ include file="../header.jsp" %>
+<%@ include file="../menu.jsp" %>
 
 <main class="layout">
 

@@ -6,7 +6,10 @@
 %>
 
 <header class="nav">
-  <h3><a href="${pageContext.request.contextPath}/index.jsp">SSU</a></h3>
+  <b onclick="location.href='${pageContext.request.contextPath}/index.jsp'"
+     style="cursor:pointer;">
+    SSU
+  </b>
 
   <a href="${pageContext.request.contextPath}/product/new.jsp">NEW</a>
   <a href="${pageContext.request.contextPath}/product/best.jsp">BEST</a>
