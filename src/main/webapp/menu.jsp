@@ -13,7 +13,7 @@
 
   <a href="${pageContext.request.contextPath}/product/new.jsp">NEW</a>
   <a href="${pageContext.request.contextPath}/product/best.jsp">BEST</a>
-  <a href="${pageContext.request.contextPath}/list.jsp">ALLCLOTHING</a>
+  <a href="${pageContext.request.contextPath}/product/products.jsp">ALLCLOTHING</a>
   <a href="${pageContext.request.contextPath}/product/top.jsp">TOP</a>
   <a href="${pageContext.request.contextPath}/product/bottom.jsp">BOTTOM</a>
   <a href="${pageContext.request.contextPath}/product/dress.jsp">DRESS</a>

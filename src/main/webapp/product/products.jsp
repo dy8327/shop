@@ -73,11 +73,10 @@ try {
 <a class="card"
    href="product.jsp?proId=<%= rs.getInt("PRO_ID") %>">
 
- <img src="<%=request.getContextPath()%>/images/<%= rs.getString("PRO_IMG") %>"
-     style="width:100%; height:300px; object-fit:contain; background:#fff;">
+  <img class="main-img"
+       src="<%=request.getContextPath()%>/images/<%= rs.getString("PRO_IMG") %>">
 
   <b><%= rs.getString("PRO_NAME") %></b>
-
   <p><%= rs.getInt("PRO_PRICE") %>원</p>
 
 </a>
@@ -85,11 +84,10 @@ try {
 <a class="card"
    href="product.jsp?proId=<%= rs.getInt("PRO_ID") %>">
 
- <img src="<%=request.getContextPath()%>/images/<%= rs.getString("PRO_IMG") %>"
-     style="width:100%; height:300px; object-fit:contain; background:#fff;">
+  <img class="main-img"
+       src="<%=request.getContextPath()%>/images/<%= rs.getString("PRO_IMG") %>">
 
   <b><%= rs.getString("PRO_NAME") %></b>
-
   <p><%= rs.getInt("PRO_PRICE") %>원</p>
 
 </a>
