@@ -68,12 +68,9 @@ try {
     while(rs.next()) {
 %>
 
-<a class="card"
-   href="product.jsp?proId=<%= rs.getInt("PRO_ID") %>">
-
+<a class="card" href="product.jsp?proId=<%= rs.getInt("PRO_ID") %>">
   <img class="main-img"
        src="<%=request.getContextPath()%>/images/<%= rs.getString("PRO_IMG") %>">
-
   <b><%= rs.getString("PRO_NAME") %></b>
   <p><%= rs.getInt("PRO_PRICE") %>원</p>
 
