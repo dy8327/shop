@@ -54,8 +54,7 @@ rs = pstmt.executeQuery();
     <a class="card"
        href="${pageContext.request.contextPath}/product/product.jsp?proId=<%= id %>">
 
-      <img class="main-img"
-           src="${pageContext.request.contextPath}/images/<%=img %>"
+      <img class="img" src="${pageContext.request.contextPath}/images/<%=img %>"
            alt="<%=name %>">
 
       <em>NEW</em>
