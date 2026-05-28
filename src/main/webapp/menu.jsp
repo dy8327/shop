@@ -29,11 +29,15 @@
         <a href="${pageContext.request.contextPath}/member/join.jsp">회원가입</a>
         <% } else { %>
         <span><%=loginName %>님</span>
-  <h4><a href="${pageContext.request.contextPath}/product/cart.jsp">🛒</a></h4>
-  <a href="${pageContext.request.contextPath}/member/logout.jsp">로그아웃</a>
-  <% if ("ADMIN".equals(loginRole)) { %>
+          <% if ("ADMIN".equals(loginRole)) { %>
             <a href="<%= request.getContextPath() %>/admin/adminMain.jsp">관리자 모드</a>
-        <% } %>
+            <% } else { %> 
+            <h4><a href="${pageContext.request.contextPath}/product/cart.jsp">🛒</a></h4>
+            <a href="${pageContext.request.contextPath}/member/myPage.jsp">마이페이지</a>
+            <% } %>
+            <a href="${pageContext.request.contextPath}/member/logout.jsp">로그아웃</a>
+
+        
     <%
         }
     %>

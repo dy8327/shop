@@ -1,10 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
-    String loginId = (String) session.getAttribute("memId");
-    String loginName = (String) session.getAttribute("memName");
-    String loginRole = (String) session.getAttribute("memRole");
+    String myId = (String) session.getAttribute("memId");
+    String myName = (String) session.getAttribute("memName");
+    String myRole = (String) session.getAttribute("memRole");
 
-    if (loginId == null) {
+    if (myId == null) {
 %>
         <script>
             alert("로그인이 필요한 페이지입니다.");
@@ -27,9 +27,9 @@
 <%@ include file="../menu.jsp" %>
 <section>
     <h2>내 정보</h2>
-    <p>아이디: <%= loginId %></p>
-    <p>이름: <%= loginName %></p>
-    <p>회원구분: <%= loginRole %></p>
+    <p>아이디: <%=myId %></p>
+    <p>이름: <%=myName %></p>
+    <p>회원구분: <%=myRole %></p>
 </section>
 
 <hr>
@@ -54,7 +54,7 @@
 </section>
 
 <p>
-    <a href="${pageContext.request.contextPath}/cart/cart.jsp">장바구니 가기</a>
+    <a href="${pageContext.request.contextPath}/product/cart.jsp">장바구니 가기</a>
 </p>
 
 <%@ include file="../footer.jsp" %>
