@@ -8,9 +8,9 @@ public class Shop implements Serializable {
     private int proPrice;       //가격
     private String proCont;     //설명
     private String proImg;      //이미지
-    private String proCategpry; //분류
+    private String proCategory; //분류
     private String proDate;     //입력일
-    private long proStock;      //재고
+    private int proStock;      //재고
     private int proOpId;        //옵션ID
     private String proSize;     //사이즈
     private String proColor;    //색상
@@ -45,11 +45,11 @@ public class Shop implements Serializable {
     public void setProImg(String proImg) {
         this.proImg = proImg;
     }
-    public String getProCategpry() {
-        return proCategpry;
+    public String getProCategory() {
+        return proCategory;
     }
-    public void setProCategpry(String proCategpry) {
-        this.proCategpry = proCategpry;
+    public void setProCategory(String proCategory) {
+        this.proCategory = proCategory;
     }
     public String getProDate() {
         return proDate;
@@ -57,10 +57,10 @@ public class Shop implements Serializable {
     public void setProDate(String proDate) {
         this.proDate = proDate;
     }
-    public long getProStock() {
+    public int getProStock() {
         return proStock;
     }
-    public void setProStock(long proStock) {
+    public void setProStock(int proStock) {
         this.proStock = proStock;
     }
     public int getProOpId() {
