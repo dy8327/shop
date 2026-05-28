@@ -47,7 +47,7 @@
             <%
                 } else if("delete".equals(edit)){
             %>
-            <a href="deleteProduct.jsp" onclick="delete Confirm('<%=rs.getString("PRO_ID") %>')" class="btn btn-danger" role="button">삭제 &raquo;</a>
+            <a href="./deleteProduct.jsp?id=<%=rs.getString("PRO_ID") %>" onclick="return Confirm('정말 삭제하시겠습니까?')" class="btn btn-danger" role="button">삭제 &raquo;</a>
             <%
                 }
             %>
