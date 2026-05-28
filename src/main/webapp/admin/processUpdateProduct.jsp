@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.io.*" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="dto.Shop" %>
+<%@ page import="dao.ShopDAO" %>
 <%@ page import="jakarta.servlet.http.*" %>
 <%@ include file="../dbconn.jsp" %>
 <%
@@ -37,52 +38,25 @@
     }
 
      //DB 정보저장
-    PreparedStatement pstmt=null;
-    
-    
-        try{
-            conn.setAutoCommit(false);
-               
-            String productSql=
-            "UPDATE PRODUCTS SET "+
-            "PRO_NAME=?, PRO_PRICE=?, PRO_CONTENT=?, PRO_CATEGORY=?, PRO_IMG=? "+
-            "WHERE PRO_ID=?";
+    Shop shop = new Shop();
+    shop.setProId(proId);
+    shop.setProName(proName);
+    shop.setProPrice(proPrice);
+    shop.setProSize(proSize);
+    shop.setProStock(proStock);
+    shop.setProColor(proColor);
+    shop.setProCont(proCont);
+    shop.setProCategory(proCategory);
+    shop.setProImg(filename);
 
-            pstmt=conn.prepareStatement(productSql);
-            
-            pstmt.setString(1, proName);
-            pstmt.setInt(2, proPrice);
-            pstmt.setString(3, proCont);
-            pstmt.setString(4, proCategory);
-            pstmt.setString(5, filename);
-            pstmt.setInt(6, proId);
-            pstmt.executeUpdate();
-            pstmt.close();
-
-            String optionSql=
-            "UPDATE PRO_OPTION SET "+
-            "PRO_SIZE=?, PRO_COLOR=?, PRO_STOCK=? "+
-            "WHERE PRO_ID=?";
-
-            pstmt=conn.prepareStatement(optionSql);
-            
-            pstmt.setString(1, proSize);
-            pstmt.setString(2, proColor);
-            pstmt.setInt(3, proStock);
-            pstmt.setInt(4, proId);
-            pstmt.executeUpdate();
-            conn.commit();
-
-            response.sendRedirect("adminMain.jsp");
-        } catch (Exception e){
-            if (conn!=null){
-                conn.rollback();
-            }
+    try{
+        ShopDAO dao = new ShopDAO();
+        dao.updateProduct(conn, shop);
+        response.sendRedirect("adminMain.jsp");
+    } catch (Exception e){
             out.println("상품수정 오류: "+e.getMessage());
         } 
         finally{
-            if(pstmt!=null)
-                pstmt.close();
             if(conn!=null)
                 conn.close();
         }
