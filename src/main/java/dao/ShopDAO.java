@@ -4,9 +4,9 @@ import java.sql.*;
 import dto.Shop;
 
 public class ShopDAO {
-
+        
     // 상품 상세 + 옵션까지 조회
-    public Shop getProductDetail(Connection conn, int proId) {
+    public Shop getProductDetail(Connection conn, int proId) throws Exception {
 
         Shop shop = null;
 
@@ -38,7 +38,7 @@ public class ShopDAO {
                 shop.setProPrice(rs.getInt("PRO_PRICE"));
                 shop.setProCont(rs.getString("PRO_CONTENT"));
                 shop.setProImg(rs.getString("PRO_IMG"));
-                shop.setProCategpry(rs.getString("PRO_CATEGORY"));
+                shop.setProCategory(rs.getString("PRO_CATEGORY"));
                 shop.setProDate(rs.getString("PRO_DATE"));
 
                 shop.setProOpId(rs.getInt("OPTION_ID"));
@@ -47,13 +47,91 @@ public class ShopDAO {
                 shop.setProStock(rs.getInt("PRO_STOCK"));
             }
 
-        } catch(Exception e) {
-            e.printStackTrace();
+        
         } finally {
-            try { rs.close(); } catch(Exception e) {}
-            try { pstmt.close(); } catch(Exception e) {}
+            if (rs!=null)
+                rs.close();
+            if(pstmt!=null)
+                pstmt.close(); 
         }
 
         return shop;
+    }
+
+    public void deleteProduct(Connection conn, int proId) throws Exception{
+        PreparedStatement pstmt=null;
+    
+    
+    try{
+        conn.setAutoCommit(false);
+    
+
+        String optionSql="DELETE FROM PRO_OPTION WHERE PRO_ID=?";
+        pstmt=conn.prepareStatement(optionSql);
+        pstmt.setInt(1, proId);
+        pstmt.executeUpdate();
+        pstmt.close();
+        
+        String prosql="DELETE FROM PRODUCTS WHERE PRO_ID=?";
+        pstmt=conn.prepareStatement(prosql);
+        pstmt.setInt(1, proId);
+        pstmt.executeUpdate();
+
+        conn.commit();
+       
+    } catch(Exception e){
+        conn.rollback();
+        throw e;
+        } finally{
+            if(pstmt!=null)
+                pstmt.close();
+    }
+    }
+
+    public void updateProduct(Connection conn, Shop shop) throws Exception{
+       
+        PreparedStatement pstmt=null;
+    
+        try{
+            conn.setAutoCommit(false);
+               
+            String productSql=
+            "UPDATE PRODUCTS SET "+
+            "PRO_NAME=?, PRO_PRICE=?, PRO_CONTENT=?, PRO_CATEGORY=?, PRO_IMG=? "+
+            "WHERE PRO_ID=?";
+
+            pstmt=conn.prepareStatement(productSql);
+            
+            pstmt.setString(1, shop.getProName());
+            pstmt.setInt(2, shop.getProPrice());
+            pstmt.setString(3, shop.getProCont());
+            pstmt.setString(4, shop.getProCategory());
+            pstmt.setString(5, shop.getProImg());
+            pstmt.setInt(6, shop.getProId());
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            String optionSql=
+            "UPDATE PRO_OPTION SET "+
+            "PRO_SIZE=?, PRO_COLOR=?, PRO_STOCK=? "+
+            "WHERE PRO_ID=?";
+
+            pstmt=conn.prepareStatement(optionSql);
+            
+            pstmt.setString(1, shop.getProSize());
+            pstmt.setString(2, shop.getProColor());
+            pstmt.setInt(3, shop.getProStock());
+            pstmt.setInt(4, shop.getProId());
+            pstmt.executeUpdate();
+            conn.commit();
+        }catch(Exception e) {
+            conn.rollback();
+            throw e;
+    
+        } finally {
+            if(pstmt != null) {
+                pstmt.close();
+            }
+        }
     }
 }
