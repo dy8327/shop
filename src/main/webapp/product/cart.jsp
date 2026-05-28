@@ -26,10 +26,7 @@ int totalPrice = 0;
 
 <!-- HEADER -->
 <header class="nav purple">
-   <b onclick="location.href='${pageContext.request.contextPath}/index.jsp'"
-   style="cursor:pointer;">
-   SSU
-   </b>
+    <b>COSMIC MALL</b>
     <span class="right">⌕ ♡ 🛒</span>
 </header>
 
@@ -114,3 +111,4 @@ for(Shop item : cartList){
 
 </body>
 </html>
+

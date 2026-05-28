@@ -32,5 +32,3 @@ function closeDone() {
 function goCart() {
   window.location.href = "/cart.jsp";
 }
-
-
