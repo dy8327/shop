@@ -133,6 +133,13 @@ background-position: center !important;
   margin: 40px auto;
 }
 
+.admin-thumb {
+  width: 100px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 /*상품상세 컬러,사이즈*/
 .color,
 .size{
