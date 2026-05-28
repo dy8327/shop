@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+
 import dto.Shop;
 
 public class ShopDAO {
@@ -198,5 +200,46 @@ public class ShopDAO {
             pstmt.close();
     }
 
+}
+
+// 관리자 메인 - 전체 상품 현황 조회
+public ArrayList<Shop> getAllProducts(Connection conn) throws Exception {
+
+    ArrayList<Shop> productList = new ArrayList<>();
+
+    String sql = "SELECT p.PRO_ID, p.PRO_CATEGORY, p.PRO_IMG, p.PRO_NAME, p.PRO_PRICE, " +
+                    "o.PRO_COLOR, o.PRO_SIZE, o.PRO_STOCK " +
+                    "FROM PRODUCTS p " +
+                    "JOIN PRO_OPTION o ON p.PRO_ID = o.PRO_ID " +
+                    "ORDER BY p.PRO_ID DESC";
+
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            Shop shop = new Shop();
+
+            shop.setProId(rs.getInt("PRO_ID"));
+            shop.setProCategory(rs.getString("PRO_CATEGORY"));
+            shop.setProImg(rs.getString("PRO_IMG"));
+            shop.setProName(rs.getString("PRO_NAME"));
+            shop.setProPrice(rs.getInt("PRO_PRICE"));
+            shop.setProColor(rs.getString("PRO_COLOR"));
+            shop.setProSize(rs.getString("PRO_SIZE"));
+            shop.setProStock(rs.getInt("PRO_STOCK"));
+
+            productList.add(shop);
+        }
+
+    } finally {
+        if (rs != null) rs.close();
+        if (pstmt != null) pstmt.close();
+    }
+
+    return productList;
 }
 }
