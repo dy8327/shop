@@ -58,11 +58,28 @@
                         class="admin-thumb"
                     >
                 </td>
-                <td><%= shop.getProName() %></td>
+                <td class="product-name"><%= shop.getProName() %></td>
                 <td><%= String.format("%,d", shop.getProPrice()) %>원</td>
                 <td><%= shop.getProColor() %></td>
                 <td><%= shop.getProSize() %></td>
-                <td><%= shop.getProStock() %>개</td>
+                <td><%
+    int stock = shop.getProStock();
+
+    if (stock == 0) {
+%>
+    <span class="stock soldout">품절</span>
+<%
+    } else if (stock <= 5) {
+%>
+    <span class="stock low"><%= stock %>개</span>
+<%
+    } else {
+%>
+    <span class="stock normal"><%= stock %>개</span>
+<%
+    }
+%>
+</td></td>
             </tr>
         <%
                 }
