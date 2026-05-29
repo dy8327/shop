@@ -6,11 +6,7 @@
 <%
 request.setCharacterEncoding("UTF-8");
 String proId = request.getParameter("proId");
-
-if (proId == null || proId.equals("")) {
-    // 테스트용으로 proId 파라미터가 안 넘어왔을 때 1번 상품으로 기본 세팅 (오류 방지)
-    proId = "1"; 
-}
+String cartResult = request.getParameter("cart");
 
 PreparedStatement pstmt = null;
 ResultSet rs = null;
@@ -93,24 +89,24 @@ try {
 
 <main class="detail">
   <p class="path">    
-    HOME &gt; CLOTHING &gt; 상의 &gt; <%= name %>  
+    HOME &gt; CLOTHING &gt; 상의 &gt; <%=name %>  
   </p>
   
   <section class="detail-grid">
     <div>      
-      <img class="main-img" src="${pageContext.request.contextPath}/images/<%= img %>" alt="<%= name %>">    
+      <img class="main-img" src="${pageContext.request.contextPath}/images/<%=img %>" alt="<%=name %>">    
     </div>
     
     <div class="info">
-      <h1><%= name %></h1>      
-      <h2><%= price %>원</h2>
+      <h1><%=name %></h1>      
+      <h2><%=price %>원</h2>
       <p>★ 4.8 (128)</p>
       
       <label>COLOR</label>      
       <div>                  
         <% for(String c : colors) { %>
-          <button type="button" class="color" data-color="<%= c %>">            
-            <%= c %>          
+          <button type="button" class="color" data-color="<%=c %>">            
+            <%=c %>          
           </button>                  
         <% } %>
       </div>
@@ -131,7 +127,7 @@ try {
         <button type="button" class="btn-qty-plus" style="min-width: 38px; height: 38px; border: 1px solid #ded2ff; border-radius: 10px; background: #fff; cursor: pointer;">+</button>      
       </div>
       
-      <form id="cartForm">
+      <form id="cartForm" action="${pageContext.request.contextPath}/cart/processAddCart.jsp" method="post">
         <input type="hidden" name="proId" value="<%= proId %>">
         
         <input type="hidden" name="color" id="selectedColor" value="">
@@ -172,7 +168,7 @@ try {
     <div class="circle">🛒</div>    
     <h3>장바구니에 추가하시겠습니까?</h3>    
     <button class="outline" onclick="closeConfirm()">취소</button>    
-    <button class="btn" onclick="showDone()">확인</button>  
+    <button class="btn" onclick="submitCart()">확인</button>  
   </div>
 </div>
 
@@ -180,15 +176,23 @@ try {
   <div class="modal">    
     <div class="circle check">✓</div>    
     <h3>장바구니에 추가되었습니다.</h3>   
-    <a class="btn" href="${pageContext.request.contextPath}/product/cart.jsp" onclick="closeDone()">장바구니 보기</a>    
-    <button class="outline" onclick="closeDone()">쇼핑 계속하기</button>  
+    <a class="btn" href="${pageContext.request.contextPath}/cart/cart.jsp" onclick="closeDone()">장바구니 보기</a>    
+    <button type="button" class="outline" onclick="closeDone()">쇼핑 계속하기</button>  
   </div>
 </div>
 
 <script>
-    const optionList = <%= jsonOptions.toString() %>;
+    const optionList = <%=jsonOptions.toString() %>;
 </script>
-<script src="${pageContext.request.contextPath}/js2/product.js"></script>
+<script src="${pageContext.request.contextPath}/js/product.js"></script>
+
+<% if ("success".equals(cartResult)) { %>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("doneModal").classList.add("show");
+    });
+</script>
+<% } %>
 
 <%@ include file="../footer.jsp" %>
 </body>
