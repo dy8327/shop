@@ -6,7 +6,7 @@
 // 세션 기반 로그인 아이디 검증 (여기서도 본인의 로그인 세션 변수명에 맞춤 필수)
 String memId = (String) session.getAttribute("memId");
 if (memId == null) {
-    response.sendRedirect("../login.jsp"); // 로그인하지 않았다면 로그인 홈으로 튕겨냅니다.
+    response.sendRedirect(request.getContextPath() + "/member/login.jsp"); // 로그인하지 않았다면 로그인 홈으로 튕겨냅니다.
     return;
 }
 
@@ -44,7 +44,7 @@ int totalPrice = 0;
 <%
 try {
     // 생성하신 테이블에 맞추어 CARTId, 상품명, 고유단가, 선택한 컬러명, 사이즈명, 누적수량을 조인 연산 처리합니다.
-    String sql = "SELECT C.CART_ID, P.PRO_NAME, P.PRO_PRICE, O.OPTION_ID, O.PRO_COLOR, O.PRO_SIZE, C.CART_STOCK, C.CART_QTY " +
+    String sql = "SELECT C.CART_ID, P.PRO_NAME, P.PRO_PRICE, O.OPTION_ID, O.PRO_COLOR, O.PRO_SIZE, C.CART_QTY " +
                  "FROM CART C " +
                  "JOIN PRODUCTS P ON C.PRO_ID = P.PRO_ID " +
                  "JOIN PRO_OPTION O ON C.OPTION_ID = O.OPTION_ID " +
@@ -85,7 +85,7 @@ try {
     <td><%= sum %>원</td>
 
     <td>
-       <a href="removeCart.jsp?cartId=<%= cartId %>" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+       <a href="${pageContext.request.contextPath}/cart/removeCart.jsp?cartId=<%=cartId %>" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
     </td>
 </tr>
 
@@ -115,7 +115,7 @@ try {
 
     <a class="btn" href="${pageContext.request.contextPath}/order/order.jsp">주문하기</a>
 
-    <a class="btn dark" href="deleteCart.jsp"
+    <a class="btn dark" href="${pageContext.request.contextPath}/cart/deleteCart.jsp"
        onclick="return confirm('장바구니를 전체 삭제하시겠습니까?')">
         전체삭제
     </a>
@@ -123,7 +123,7 @@ try {
 
 </main>
 
-<%@ include file="/footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 
 </body>
 </html>
