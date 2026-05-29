@@ -26,7 +26,8 @@ try {
         if(member!=null){
         session.setAttribute("memId", member.getMemId()); 
         session.setAttribute("memName", member.getMemName()); 
-        session.setAttribute("memRole", member.getMemRole()); 
+        session.setAttribute("memRole", member.getMemRole());
+        session.setAttribute("memGrade", member.getMemGrade()); 
         response.sendRedirect("../index.jsp"); 
         } else { 
             %>
