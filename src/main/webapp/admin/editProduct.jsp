@@ -30,7 +30,7 @@
 
         try {
             String sql = "SELECT p.PRO_ID, p.PRO_NAME, p.PRO_PRICE, p.PRO_CONTENT, p.PRO_CATEGORY, p.PRO_IMG, " +
-                         "o.PRO_SIZE, o.PRO_COLOR, o.PRO_STOCK " +
+                         "o.OPTION_ID, o.PRO_SIZE, o.PRO_COLOR, o.PRO_STOCK " +
                          "FROM PRODUCTS p " +
                          "LEFT JOIN PRO_OPTION o ON p.PRO_ID = o.PRO_ID " +
                          "ORDER BY p.PRO_ID DESC";
@@ -55,7 +55,7 @@
                 <%
                     if ("update".equals(edit)) {
                 %>
-                    <a href="./updateProduct.jsp?id=<%=rs.getString("PRO_ID") %>" class="admin-btn small">
+                    <a href="./updateProduct.jsp?id=<%=rs.getString("PRO_ID") %>&optionId=<%=rs.getString("OPTION_ID")%>" class="admin-btn small">
                         수정 &raquo;
                     </a>
                 <%
