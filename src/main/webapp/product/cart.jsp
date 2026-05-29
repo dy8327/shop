@@ -1,21 +1,22 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="dto.Shop" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.sql.*" %>
+<%@ include file="../dbconn.jsp" %>
 
 <%
-ArrayList<Shop> cartList =
-(ArrayList<Shop>)session.getAttribute("cartList");
-
-if(cartList == null){
-    cartList = new ArrayList<Shop>();
+// 세션 기반 로그인 아이디 검증 (여기서도 본인의 로그인 세션 변수명에 맞춤 필수)
+String memId = (String) session.getAttribute("memberId");
+if (memId == null) {
+    response.sendRedirect("../login.jsp"); // 로그인하지 않았다면 로그인 홈으로 튕겨냅니다.
+    return;
 }
 
+PreparedStatement pstmt = null;
+ResultSet rs = null;
 int totalPrice = 0;
 %>
 
 <!doctype html>
 <html lang="ko">
-
 <head>
 <meta charset="UTF-8">
 <title>장바구니</title>
@@ -31,70 +32,89 @@ int totalPrice = 0;
 <h1>장바구니</h1>
 
 <table>
-
 <tr>
     <th>상품</th>
     <th>옵션</th>
     <th>수량</th>
     <th>가격</th>
     <th>합계</th>
-    <th>삭제</th> <!-- ⭐ 추가 -->
+    <th>삭제</th> 
 </tr>
 
 <%
-for(Shop item : cartList){
+try {
+    // 생성하신 테이블에 맞추어 CARTId, 상품명, 고유단가, 선택한 컬러명, 사이즈명, 누적수량을 조인 연산 처리합니다.
+    String sql = "SELECT C.CART_ID, P.PRO_NAME, P.PRO_PRICE, O.PRO_COLOR, O.PRO_SIZE, C.CART_STOCK " +
+                 "FROM CART C " +
+                 "JOIN PRODUCTS P ON C.PRO_ID = P.PRO_ID " +
+                 "JOIN PRO_OPTION O ON C.OPTION_ID = O.OPTION_ID " +
+                 "WHERE C.MEM_ID = ? " +
+                 "ORDER BY C.CREATE_DATE DESC";
+                 
+    pstmt = conn.prepareStatement(sql);
+    pstmt.setString(1, memId);
+    rs = pstmt.executeQuery();
 
-    int sum = item.getProPrice() * item.getQuantity();
-    totalPrice += sum;
+    boolean hasItems = false;
+    while(rs.next()) {
+        hasItems = true;
+        int cartId = rs.getInt("CART_ID");
+        String proName = rs.getString("PRO_NAME");
+        int proPrice = rs.getInt("PRO_PRICE");
+        String color = rs.getString("PRO_COLOR");
+        String size = rs.getString("PRO_SIZE");
+        int quantity = rs.getInt("CART_STOCK");
+
+        int sum = proPrice * quantity;
+        totalPrice += sum;
 %>
 
 <tr>
+    <td><%= proName %></td>
 
-    <!-- 상품명 -->
-    <td><%= item.getProName() %></td>
+    <td><%= color %> / <%= size %></td>
 
-    <!-- 옵션 -->
     <td>
-        <%= item.getProColor() %> / <%= item.getProSize() %>
+        <a href="updateCartQty.jsp?cartId=<%= cartId %>&action=down">-</a>
+        <%= quantity %>
+        <a href="updateCartQty.jsp?cartId=<%= cartId %>&action=up">+</a>
     </td>
 
-    <!-- 수량 -->
-    <td>
-        <a href="#">-</a>
-        <%= item.getQuantity() %>
-        <a href="#">+</a>
-    </td>
+    <td><%= proPrice %>원</td>
 
-    <!-- 가격 -->
-    <td><%= item.getProPrice() %>원</td>
-
-    <!-- 합계 -->
     <td><%= sum %>원</td>
 
-    <!-- ⭐ 개별 삭제 -->
-  <td>
-   <a href="removeCart.jsp?proId=<%=item.getProId()%>&proOpId=<%=item.getProOpId()%>"
-      onclick="return confirm('삭제하시겠습니까?')">
-
-        삭제
-   </a>
-</td>
-
+    <td>
+       <a href="removeCart.jsp?cartId=<%= cartId %>" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+    </td>
 </tr>
 
 <%
+    }
+    if(!hasItems) {
+%>
+    <tr>
+        <td colspan="6" style="text-align:center; padding: 60px 0; color: #77689d;">
+            장바구니에 담긴 내역이 존재하지 않습니다.
+        </td>
+    </tr>
+<%
+    }
+} catch(Exception e) {
+    out.println("<tr><td colspan='6'>데이터 로드 중 장애 발생: " + e.getMessage() + "</td></tr>");
+} finally {
+    if(rs != null) rs.close();
+    if(pstmt != null) pstmt.close();
 }
 %>
 
 </table>
 
-<!-- 총합 -->
 <div class="cart-total">
     <h2>총 합계 <%= totalPrice %>원</h2>
 
     <a class="btn" href="order.jsp">주문하기</a>
 
-    <!-- ⭐ 전체 삭제 -->
     <a class="btn dark" href="deleteCart.jsp"
        onclick="return confirm('장바구니를 전체 삭제하시겠습니까?')">
         전체삭제
@@ -107,4 +127,3 @@ for(Shop item : cartList){
 
 </body>
 </html>
-
