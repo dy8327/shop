@@ -859,3 +859,166 @@ body .admin-form-wrap {
 button:disabled {
   pointer-events: none;
 }
+
+/*마이페이지*/
+/* 마이페이지 */
+.mypage-wrap {
+  width: 88%;
+  max-width: 1100px;
+  margin: 46px auto 70px;
+}
+
+.mypage-hero {
+  padding: 42px 44px;
+  border-radius: 28px;
+  color: white;
+  background:
+    radial-gradient(circle at 85% 25%, rgba(255,190,237,.75), transparent 20%),
+    linear-gradient(135deg, #160b46, #7658ff 55%, #e59be8);
+  box-shadow: 0 20px 60px rgba(58, 31, 128, 0.22);
+  margin-bottom: 28px;
+}
+
+.mypage-label {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  opacity: 0.8;
+}
+
+.mypage-hero h1 {
+  margin: 0 0 12px;
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.mypage-hero p {
+  margin: 0;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+.mypage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.mypage-card {
+  padding: 28px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid #eee7ff;
+  box-shadow: 0 14px 40px rgba(88, 55, 160, 0.13);
+}
+
+.mypage-card h2 {
+  margin: 0 0 18px;
+  color: #130b3f;
+  font-size: 24px;
+}
+
+.mypage-card p {
+  color: #5f527f;
+  line-height: 1.7;
+}
+
+.profile-card {
+  grid-row: span 2;
+}
+
+.profile-info {
+  margin-top: 12px;
+}
+
+.profile-info p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 13px 0;
+  padding: 15px 17px;
+  border-radius: 14px;
+  background: #f7f3ff;
+}
+
+.profile-info span {
+  color: #77689d;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.profile-info strong {
+  color: #130b3f;
+  font-size: 16px;
+}
+
+.mypage-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7658ff, #e48bd8);
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.outline-btn {
+  background: white;
+  color: #7658ff;
+  border: 1px solid #ded2ff;
+}
+
+.mypage-bottom {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.mypage-bottom a {
+  padding: 13px 24px;
+  border-radius: 999px;
+  background: #130b3f;
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.mypage-bottom a:last-child {
+  background: white;
+  color: #7658ff;
+  border: 1px solid #ded2ff;
+}
+
+@media(max-width:900px) {
+  .mypage-wrap {
+    width: 92%;
+    margin: 28px auto 50px;
+  }
+
+  .mypage-hero {
+    padding: 32px 26px;
+  }
+
+  .mypage-hero h1 {
+    font-size: 28px;
+  }
+
+  .mypage-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-card {
+    grid-row: auto;
+  }
+
+  .mypage-bottom {
+    flex-direction: column;
+  }
+
+  .mypage-bottom a {
+    text-align: center;
+  }
+}
