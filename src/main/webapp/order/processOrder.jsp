@@ -36,7 +36,7 @@ try {
     // 1. 장바구니 상품 조회
     String cartSql =
         "SELECT " +
-        "C.CART_ID, C.MEM_ID, C.PRO_ID, C.OPTION_ID, C.CART_STOCK, " +
+        "C.CART_ID, C.MEM_ID, C.PRO_ID, C.OPTION_ID, C.CART_QTY, " +
         "P.PRO_NAME, P.PRO_PRICE, " +
         "O.PRO_SIZE, O.PRO_COLOR " +
         "FROM CART C " +
@@ -55,9 +55,9 @@ try {
         hasCart = true;
 
         int proPrice = rs.getInt("PRO_PRICE");
-        int cartStock = rs.getInt("CART_STOCK");
+        int cartQty = rs.getInt("CART_QTY");
 
-        totalPrice += proPrice * cartStock;
+        totalPrice += proPrice * cartQty;
     }
 
     rs.close();
@@ -121,8 +121,8 @@ try {
 
     while (rs.next()) {
         int proPrice = rs.getInt("PRO_PRICE");
-        int cartStock = rs.getInt("CART_STOCK");
-        int sumPrice = proPrice * cartStock;
+        int cartQty = rs.getInt("CART_QTY");
+        int sumPrice = proPrice * cartQty;
 
         detailPstmt.setInt(1, orderId);
         detailPstmt.setInt(2, rs.getInt("PRO_ID"));
@@ -133,7 +133,7 @@ try {
         detailPstmt.setString(4, rs.getString("PRO_NAME"));
         detailPstmt.setString(5, rs.getString("PRO_COLOR"));
         detailPstmt.setString(6, rs.getString("PRO_SIZE"));
-        detailPstmt.setInt(7, cartStock);
+        detailPstmt.setInt(7, cartQty);
         detailPstmt.setInt(8, proPrice);
         detailPstmt.setInt(9, sumPrice);
 

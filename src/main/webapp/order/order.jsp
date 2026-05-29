@@ -23,7 +23,7 @@
 
     String sql =
         "SELECT " +
-        "C.CART_ID, C.MEM_ID, C.PRO_ID, C.OPTION_ID, C.CART_STOCK, " +
+        "C.CART_ID, C.MEM_ID, C.PRO_ID, C.OPTION_ID, C.CART_QTY, " +
         "P.PRO_NAME, P.PRO_PRICE, P.PRO_IMG, " +
         "O.PRO_SIZE, O.PRO_COLOR, O.PRO_STOCK " +
         "FROM CART C " +
@@ -79,8 +79,8 @@
                                 hasCart = true;
 
                                 int proPrice = rs.getInt("PRO_PRICE");
-                                int cartStock = rs.getInt("CART_STOCK");
-                                int sumPrice = proPrice * cartStock;
+                                int cartQty = rs.getInt("CART_QTY");
+                                int sumPrice = proPrice * cartQty;
 
                                 totalPrice += sumPrice;
                     %>
@@ -91,9 +91,9 @@
                             <%= rs.getString("PRO_COLOR") %> /
                             <%= rs.getString("PRO_SIZE") %>
                         </td>
-                        <td><%= cartStock %></td>
-                        <td><%= proPrice %>원</td>
-                        <td><%= sumPrice %>원</td>
+                        <td><%=cartQty %></td>
+                        <td><%=proPrice %>원</td>
+                        <td><%=sumPrice %>원</td>
                     </tr>
 
                     <%
