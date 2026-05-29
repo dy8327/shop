@@ -1,11 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="dto.Shop" %>
+<%@ page import="java.sql.*" %>
+<%@ include file="../dbconn.jsp" %>
 
 <%
-    String orderloginId = (String) session.getAttribute("memId");
+    String orderLoginId = (String) session.getAttribute("memId");
 
-    if (orderloginId == null) {
+    if (orderLoginId == null) {
 %>
     <script>
         alert("로그인 후 주문할 수 있습니다.");
@@ -15,11 +15,21 @@
         return;
     }
 
-    ArrayList<Shop> cartList =
-        (ArrayList<Shop>) session.getAttribute("cartList");
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
 
     int totalPrice = 0;
     int deliveryFee = 3000;
+
+    String sql =
+        "SELECT " +
+        "C.CART_ID, C.MEM_ID, C.PRO_ID, C.OPTION_ID, C.CART_STOCK, " +
+        "P.PRO_NAME, P.PRO_PRICE, P.PRO_IMG, " +
+        "O.PRO_SIZE, O.PRO_COLOR, O.PRO_STOCK " +
+        "FROM CART C " +
+        "JOIN PRODUCTS P ON C.PRO_ID = P.PRO_ID " +
+        "JOIN PRO_OPTION O ON C.OPTION_ID = O.OPTION_ID " +
+        "WHERE C.MEM_ID = ?";
 %>
 
 <!doctype html>
@@ -42,52 +52,70 @@
 
     <div class="order-grid">
 
-        <!-- 왼쪽: 주문 상품 / 배송 정보 -->
+        <!-- 왼쪽 영역 -->
         <div>
 
             <section class="panel">
                 <h2>주문 상품</h2>
-
-                <%
-                    if (cartList == null || cartList.size() == 0) {
-                %>
-                    <p>장바구니에 담긴 상품이 없습니다.</p>
-                    <a class="btn" href="${pageContext.request.contextPath}/product/products.jsp">
-                        상품 보러가기
-                    </a>
-                <%
-                    } else {
-                %>
 
                 <table>
                     <tr>
                         <th>상품</th>
                         <th>옵션</th>
                         <th>수량</th>
+                        <th>가격</th>
                         <th>합계</th>
                     </tr>
 
                     <%
-                        for (Shop item : cartList) {
-                            int sum = item.getProPrice() * item.getQuantity();
-                            totalPrice += sum;
+                        try {
+                            pstmt = conn.prepareStatement(sql);
+                            pstmt.setString(1, orderLoginId);
+                            rs = pstmt.executeQuery();
+
+                            boolean hasCart = false;
+
+                            while (rs.next()) {
+                                hasCart = true;
+
+                                int proPrice = rs.getInt("PRO_PRICE");
+                                int cartStock = rs.getInt("CART_STOCK");
+                                int sumPrice = proPrice * cartStock;
+
+                                totalPrice += sumPrice;
                     %>
 
                     <tr>
-                        <td><%= item.getProName() %></td>
-                        <td><%= item.getProColor() %> / <%= item.getProSize() %></td>
-                        <td><%= item.getQuantity() %></td>
-                        <td><%= sum %>원</td>
+                        <td><%= rs.getString("PRO_NAME") %></td>
+                        <td>
+                            <%= rs.getString("PRO_COLOR") %> /
+                            <%= rs.getString("PRO_SIZE") %>
+                        </td>
+                        <td><%= cartStock %></td>
+                        <td><%= proPrice %>원</td>
+                        <td><%= sumPrice %>원</td>
                     </tr>
 
                     <%
+                            }
+
+                            if (!hasCart) {
+                    %>
+                    <tr>
+                        <td colspan="5">장바구니에 담긴 상품이 없습니다.</td>
+                    </tr>
+                    <%
+                            }
+
+                        } catch (Exception e) {
+                            out.println("<tr><td colspan='5'>주문 상품 조회 오류: " + e.getMessage() + "</td></tr>");
+                        } finally {
+                            if (rs != null) try { rs.close(); } catch(Exception e) {}
+                            if (pstmt != null) try { pstmt.close(); } catch(Exception e) {}
                         }
                     %>
-                </table>
 
-                <%
-                    }
-                %>
+                </table>
             </section>
 
             <section class="panel">
@@ -101,7 +129,7 @@
 
         </div>
 
-        <!-- 오른쪽: 결제 정보 -->
+        <!-- 오른쪽 영역 -->
         <div>
 
             <section class="panel">
@@ -135,19 +163,19 @@
                 <%
                     int finalPrice = totalPrice;
 
-                    if (cartList != null && cartList.size() > 0) {
+                    if (totalPrice > 0) {
                         finalPrice = totalPrice + deliveryFee;
                     }
                 %>
 
                 <p>상품 금액: <%= totalPrice %>원</p>
-                <p>배송비: <%= (cartList == null || cartList.size() == 0) ? 0 : deliveryFee %>원</p>
+                <p>배송비: <%= totalPrice > 0 ? deliveryFee : 0 %>원</p>
                 <h2>총 결제 금액: <%= finalPrice %>원</h2>
 
                 <input type="hidden" name="totalPrice" value="<%= finalPrice %>">
 
                 <%
-                    if (cartList != null && cartList.size() > 0) {
+                    if (totalPrice > 0) {
                 %>
                     <button type="submit" class="btn wide">결제하기</button>
                 <%
@@ -158,7 +186,7 @@
                     }
                 %>
 
-                <a class="outline wide" href="${pageContext.request.contextPath}/cart/cart.jsp">
+                <a class="outline wide" href="${pageContext.request.contextPath}/product/cart.jsp">
                     장바구니로 돌아가기
                 </a>
             </section>
@@ -175,3 +203,7 @@
 
 </body>
 </html>
+
+<%
+    if (conn != null) try { conn.close(); } catch(Exception e) {}
+%>
