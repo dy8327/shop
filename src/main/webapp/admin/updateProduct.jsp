@@ -10,12 +10,11 @@
 <body>
 <%@ include file="/admin/adminMenu.jsp" %>
 
-    <div class="admin-form-wrap">
+<div class="admin-form-wrap">
         <div class="admin-page-title">
         <h1>상품 수정</h1>
         <p>Product Updating</p>
-    </div>
-
+        </div>
 <%
     String proId=request.getParameter("id");
     PreparedStatement pstmt=null;
@@ -32,74 +31,58 @@
     if(rs.next()){
         String category = rs.getString("PRO_CATEGORY");
 %>
-<div class="row align-items-md-stretch">
-    <div class="col-md-5">
+
+    
     <img src="${pageContext.request.contextPath}/images/<%=rs.getString("PRO_IMG")%>" alt="image" style="width:100%" />
-</div>
-<div class="col-md-7">
-    <form name="updateProduct" action="./processUpdateProduct.jsp" method="post" enctype="multipart/form-data">
+    
+
+    <form name="updateProduct" action="./processUpdateProduct.jsp" method="post" class="admin-form" enctype="multipart/form-data">
     <input type="hidden" name="proId" value="<%=rs.getString("PRO_ID") %>">
     <input type="hidden" name="oldFilename" value="<%=rs.getString("PRO_IMG") %>">
-     <div class="mb-3 row">
-        <label class="col-sm-2">상품명</label>
-        <div class="col-sm-5">
+     <div class="form-row">
+        <label for="proName">상품명</label>
         <input type="text" name="proName" id="proName" class="form-control" value='<%=rs.getString("PRO_NAME") %>'>
-        </div>
     </div>
-    <div class="mb-3 row">
-        <label class="col-sm-2">가격</label>
-        <div class="col-sm-5">
+    <div class="form-row">
+        <label for="proPrice">가격</label>
         <input type="text" name="proPrice" id="proPrice" class="form-control" value='<%=rs.getString("PRO_PRICE") %>'>
-        </div>
     </div>
-    <div class="mb-3 row">
-        <label class="col-sm-2">사이즈</label>
-        <div class="col-sm-5">
+    <div class="form-row">
+        <label for="proSize">사이즈</label>
         <input type="text" name="proSize" id="proSize" class="form-control" value='<%=rs.getString("PRO_SIZE") %>'>
-        </div>
     </div>
-        <div class="mb-3 row">
-        <label class="col-sm-2">색상</label>
-        <div class="col-sm-5">
+    <div class="form-row">
+        <label for="proColor">색상</label>
         <input type="text" name="proColor" id="proColor" class="form-control" value='<%=rs.getString("PRO_COLOR") %>'>
-        </div>
     </div>
-    <div class="mb-3 row">
-        <label class="col-sm-2">재고수량</label>
-        <div class="col-sm-5">
+    <div class="form-row">
+        <label for="proStock">재고수량</label>
         <input type="text" name="proStock" id="proStock" class="form-control" value='<%=rs.getString("PRO_STOCK") %>'>
-        </div>
     </div>
-    <div class="mb-3 row">
-        <label class="col-sm-2">상세정보</label>
-        <div class="col-sm-8">
+    <div class="form-row">
+        <label for="proCont">상세정보</label>
         <textarea name="proCont" id="proCont" cols="50" rows="4" class="form-control" placeholder="100자 이상 적어주세요">
         <%=rs.getString("PRO_CONTENT") %>
         </textarea>
-        </div>
     </div>
-    <div class="mb-3 row">
-        <label class="col-sm-2">카테고리</label>
-        <div class="col-sm-5">
+    <div class="form-row">
+        <label>카테고리</label>
+        <div class="radio-group">
        <input type="radio" name="proCategory" value="TOP" <%="TOP".equals(category)? "checked" :"" %>> 상의
         <input type="radio" name="proCategory" value="BOTTOM" <%="BOTTOM".equals(category)? "checked" :"" %>> 하의
         <input type="radio" name="proCategory" value="DRESS" <%="DRESS".equals(category)? "checked" :"" %>> 원피스
         <input type="radio" name="proCategory" value="ACC" <%="ACC".equals(category)? "checked" :"" %>> 악세서리
         </div>
     </div>
-    <div class="mb-3 row">
-        <label class="col-sm-2">이미지</label>
-        <div class="col-sm-8">
+    <div class="form-row">
+        <label for="filename">이미지</label>
         <input type="file" name="filename" class="form-control">
-        </div>
     </div>
-    <div class="mb-3 row">
-        <div class="col-sm-offset-2 col-sm-10">
-        <input type="submit" class="btn btn-primary" value="수정">
-        </div>
+    <div class ="form-btn-area">
+        <input type="submit" class="admin-btn" value="수정">
     </div>
     </form>
-    </div>
+</div>
 <%
     } else{
         out.println("<p>해당상품을 찾을 수 없습니다.</p>");
