@@ -27,17 +27,28 @@
                     <input type="text" id="proPrice" name="proPrice">
             </div>
            <div class="form-row">
-                <label for="proSize">사이즈</label>
-                    <input type="text" id="proSize" name="proSize">
+        <label>상품 옵션</label>
+
+        <div id="optionArea">
+            <div class="option-row">
+                <select name="proSize" class="option-size">
+                    <option value="">사이즈 선택</option>
+                    <option value="FREE">FREE</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+
+                <input type="text" name="proColor" class="option-color" placeholder="색상 입력">
+                <input type="text" name="proStock" class="option-stock" placeholder="재고수량">
+
+                <button type="button" class="option-delete-btn" onclick="removeOption(this)">삭제</button>
             </div>
-            <div class="form-row">
-                <label for="proStock">재고수량</label>
-                    <input type="text" id="proStock" name="proStock">
-            </div>
-                <div class="form-row">
-                <label for="proColor">색상</label>
-                    <input type="text" id="proColor" name="proColor">
-            </div>
+        </div>
+
+        <button type="button" class="option-add-btn" onclick="addOption()">옵션 추가</button>
+    </div>
             
             <div class="form-row">
                 <label for="proCont">상세정보</label>

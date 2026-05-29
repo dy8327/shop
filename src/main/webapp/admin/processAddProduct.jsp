@@ -11,11 +11,11 @@
     
     String proName=request.getParameter("proName");
     int proPrice=Integer.parseInt(request.getParameter("proPrice"));
-    String proSize=request.getParameter("proSize");
-    int proStock=Integer.parseInt(request.getParameter("proStock"));
-    String proColor=request.getParameter("proColor");
     String proCont=request.getParameter("proCont");
     String proCategory=request.getParameter("proCategory");
+    String[] proSizeArr = request.getParameterValues("proSize");
+    String[] proStockArr = request.getParameterValues("proStock");
+    String[] proColorArr = request.getParameterValues("proColor");
     String filename="";
 
     Part filePart = request.getPart("filename");
@@ -37,16 +37,13 @@
     Shop shop = new Shop();
     shop.setProName(proName);
     shop.setProPrice(proPrice);
-    shop.setProSize(proSize);
-    shop.setProStock(proStock);
-    shop.setProColor(proColor);
     shop.setProCont(proCont);
     shop.setProCategory(proCategory);
     shop.setProImg(filename);
 
         try{
         ShopDAO dao = new ShopDAO();
-        dao.insertProduct(conn, shop);
+        dao.insertProduct(conn, shop, proSizeArr, proColorArr, proStockArr);
         response.sendRedirect("adminMain.jsp");
     } catch (Exception e){
             out.println("상품등록 오류: "+e.getMessage());
