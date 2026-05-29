@@ -24,11 +24,13 @@ int totalPrice = 0;
 
 <body class="soft">
 
-<!-- HEADER -->
+<%--<!-- HEADER -->
 <header class="nav purple">
     <b>COSMIC MALL</b>
     <span class="right">⌕ ♡ 🛒</span>
-</header>
+</header>--%>
+
+<%@ include file="/menu.jsp" %>
 
 <main class="wrap">
 
