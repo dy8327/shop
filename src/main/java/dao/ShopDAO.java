@@ -117,15 +117,13 @@ public class ShopDAO {
 
             String optionSql=
             "UPDATE PRO_OPTION SET "+
-            "PRO_SIZE=?, PRO_COLOR=?, PRO_STOCK=? "+
-            "WHERE PRO_ID=?";
+            "PRO_STOCK=? "+
+            "WHERE OPTION_ID=?";
 
             pstmt=conn.prepareStatement(optionSql);
             
-            pstmt.setString(1, shop.getProSize());
-            pstmt.setString(2, shop.getProColor());
-            pstmt.setInt(3, shop.getProStock());
-            pstmt.setInt(4, shop.getProId());
+            pstmt.setInt(1, shop.getProStock());
+            pstmt.setInt(2, shop.getProOpId());
             pstmt.executeUpdate();
             conn.commit();
         }catch(Exception e) {

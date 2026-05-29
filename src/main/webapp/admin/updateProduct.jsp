@@ -17,16 +17,18 @@
         </div>
 <%
     String proId=request.getParameter("id");
+    String proOpId=request.getParameter("optionId");
     PreparedStatement pstmt=null;
     ResultSet rs=null;
     try{
     String sql="SELECT p.PRO_ID, p.PRO_NAME, p.PRO_PRICE, p.PRO_CONTENT, p.PRO_CATEGORY, p.PRO_IMG, " +
-            "o.PRO_SIZE, o.PRO_COLOR, o.PRO_STOCK " +
+            "o.OPTION_ID, o.PRO_SIZE, o.PRO_COLOR, o.PRO_STOCK " +
             "FROM PRODUCTS p " +
             "LEFT JOIN PRO_OPTION o ON p.PRO_ID = o.PRO_ID " +
-            "WHERE p.PRO_ID = ?";
+            "WHERE p.PRO_ID = ? AND o.OPTION_ID = ?";
     pstmt=conn.prepareStatement(sql);
     pstmt.setString(1, proId);
+    pstmt.setString(2, proOpId);
     rs=pstmt.executeQuery();
     if(rs.next()){
         String category = rs.getString("PRO_CATEGORY");
@@ -39,6 +41,7 @@
     <form name="updateProduct" action="./processUpdateProduct.jsp" method="post" class="admin-form" enctype="multipart/form-data">
     <input type="hidden" name="proId" value="<%=rs.getString("PRO_ID") %>">
     <input type="hidden" name="oldFilename" value="<%=rs.getString("PRO_IMG") %>">
+    <input type="hidden" name="proOpId" value="<%=rs.getString("OPTION_ID") %>">
      <div class="form-row">
         <label for="proName">상품명</label>
         <input type="text" name="proName" id="proName" class="form-control" value='<%=rs.getString("PRO_NAME") %>'>
@@ -82,7 +85,7 @@
         <input type="submit" class="admin-btn" value="수정">
     </div>
     </form>
-</div>
+
 <%
     } else{
         out.println("<p>해당상품을 찾을 수 없습니다.</p>");

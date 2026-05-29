@@ -16,6 +16,7 @@
     String proCont=request.getParameter("proCont");
     String proCategory=request.getParameter("proCategory");
     String oldFilename=request.getParameter("oldFilename");
+    int proOpId=Integer.parseInt(request.getParameter("proOpId"));
 
     String filename=oldFilename;
 
@@ -48,6 +49,7 @@
     shop.setProCont(proCont);
     shop.setProCategory(proCategory);
     shop.setProImg(filename);
+    shop.setProOpId(proOpId);
 
     try{
         ShopDAO dao = new ShopDAO();
