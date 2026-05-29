@@ -11,7 +11,7 @@ public class MemberDAO {
     }
 
     public Member login(String memId, String memPw) throws SQLException{
-        String sql = "SELECT MEM_ID, MEM_NAME, MEM_ROLE FROM MEMBERS "+
+        String sql = "SELECT MEM_ID, MEM_NAME, MEM_ROLE, MEM_GRADE FROM MEMBERS "+
         "WHERE MEM_ID = ? AND MEM_PW = ?"; 
 
         PreparedStatement pstmt = null; 
@@ -27,6 +27,7 @@ public class MemberDAO {
                 member.setMemId(rs.getString("MEM_ID"));
                 member.setMemName(rs.getString("MEM_NAME"));
                 member.setMemRole(rs.getString("MEM_ROLE"));
+                member.setMemGrade(rs.getString("MEM_GRADE"));
 
                 return member;
         }

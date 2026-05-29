@@ -9,6 +9,9 @@ public class Member implements Serializable{
     private String memPhone;
     private String memEmail;
     private String memAddress;
+    private String memGrade;
+    private String memRole;
+    private String memJoinDate;
     public String getMemId() {
         return memId;
     }
@@ -63,8 +66,6 @@ public class Member implements Serializable{
     public void setMemJoinDate(String memJoinDate) {
         this.memJoinDate = memJoinDate;
     }
-    private String memGrade;
-    private String memRole;
-    private String memJoinDate;
+
     
 }
