@@ -48,7 +48,7 @@
     <table class="admin-table">
         <tr>
             <th>회원ID</th>
-            <th>이름</th>
+            <th>회원명</th>
             <th>등급</th>
             <th>전화번호</th>
             <th>주문내역</th>
