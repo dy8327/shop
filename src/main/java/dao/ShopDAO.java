@@ -139,7 +139,7 @@ public class ShopDAO {
         }
     }
 
-    public void insertProduct(Connection conn, Shop shop) throws Exception{
+    public void insertProduct(Connection conn, Shop shop, String[] proSizeArr, String[] proColorArr, String[] proStockArr) throws Exception{
 
         PreparedStatement pstmt=null;
         ResultSet rs= null;
@@ -182,11 +182,13 @@ public class ShopDAO {
                 "VALUES(SEQ_PRODUCTS_OPTION.NEXTVAL, ?, ?, ?, ?)";
     
                 pstmt=conn.prepareStatement(optionSql);
-                pstmt.setInt(1, proId);
-                pstmt.setString(2, shop.getProSize());
-                pstmt.setString(3, shop.getProColor());
-                pstmt.setInt(4, shop.getProStock());
-                pstmt.executeUpdate();
+                for(int i = 0; i < proSizeArr.length; i++){
+                    pstmt.setInt(1, proId);
+                    pstmt.setString(2, proSizeArr[i]);
+                    pstmt.setString(3, proColorArr[i]);
+                    pstmt.setInt(4, Integer.parseInt(proStockArr[i]));
+                    pstmt.executeUpdate();
+                }
                 conn.commit();
     }catch(Exception e) {
         conn.rollback();
