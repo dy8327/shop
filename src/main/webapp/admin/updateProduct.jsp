@@ -1,4 +1,4 @@
-<%@ page contentType = "text/html; charset = utf-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset = utf-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*" %>
 <%@ include file="../dbconn.jsp" %>
 <html>
@@ -8,15 +8,13 @@
 </head>
 
 <body>
-<div class="container py-4">
 <%@ include file="/admin/adminMenu.jsp" %>
 
-<div class="p-5 mb-4 bg-body-tertiary rounded-3">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">상품 수정</h1>
-        <p class="col-md-8 fs-4">Product Updating</p>
+    <div class="admin-form-wrap">
+        <div class="admin-page-title">
+        <h1>상품 수정</h1>
+        <p>Product Updating</p>
     </div>
-</div>
 
 <%
     String proId=request.getParameter("id");
