@@ -75,9 +75,9 @@ try {
     <td><%=color %> / <%=size %></td>
 
     <td>
-        <a href="updateCartQty.jsp?cartId=<%=cartId %>&action=down">-</a>
+        <a href="${pageContext.request.contextPath}/cart/updateCartQty.jsp?cartId=<%=cartId %>&action=down">-</a>
         <%=quantity %>
-        <a href="updateCartQty.jsp?cartId=<%=cartId %>&action=up">+</a>
+        <a href="${pageContext.request.contextPath}/cart/updateCartQty.jsp?cartId=<%=cartId %>&action=up">+</a>
     </td>
 
     <td><%= proPrice %>원</td>
