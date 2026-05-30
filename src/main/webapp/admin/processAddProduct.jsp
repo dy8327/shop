@@ -8,9 +8,16 @@
 <%
     request.setCharacterEncoding("UTF-8");
 
-    
+    Part filePart = request.getPart("filename");
     String proName=request.getParameter("proName");
-    int proPrice=Integer.parseInt(request.getParameter("proPrice"));
+   String proPriceStr = request.getParameter("proPrice");
+
+if(proPriceStr == null || proPriceStr.trim().equals("")){
+    out.println("가격 값이 넘어오지 않았습니다. addProduct.jsp의 name='proPrice' 또는 form 범위를 확인하세요.");
+    return;
+}
+
+    int proPrice = Integer.parseInt(proPriceStr);
     String proCont=request.getParameter("proCont");
     String proCategory=request.getParameter("proCategory");
     String[] proSizeArr = request.getParameterValues("proSize");
@@ -18,7 +25,7 @@
     String[] proColorArr = request.getParameterValues("proColor");
     String filename="";
 
-    Part filePart = request.getPart("filename");
+    
 
     if(filePart != null && filePart.getSize()>0){
         filename=filePart.getSubmittedFileName();

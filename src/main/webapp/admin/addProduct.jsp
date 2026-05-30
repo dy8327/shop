@@ -72,7 +72,6 @@
             <div class ="form-btn-area">
                 <input type="button" class="admin-btn" value="등록" onclick="CheckAddProduct()">
                 </div>
-            </div>
         </form>
     </div>
 </body>
