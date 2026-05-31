@@ -30,36 +30,39 @@
             <h2>검색 결과</h2>
             <p>
                 검색어:
-                <strong><%=keyword %></strong>
+                <strong><%= keyword %></strong>
             </p>
         </div>
     </div>
 
-    <div class="grid">
-
 <%
     PreparedStatement pstmt = null;
     ResultSet rs = null;
+    boolean hasResult = false;
+
     if (keyword.equals("")) {
 %>
-    <p>검색어를 입력해주세요.</p>
+        <div class="panel">
+            <p>검색어를 입력해주세요.</p>
+        </div>
 <%
-} else {
-    // DB 검색 실행
-    try {
-        String sql = "SELECT * FROM PRODUCTS WHERE PRO_NAME LIKE ? ORDER BY PRO_ID DESC";
-        pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, "%" + keyword + "%");
+    } else {
+        try {
+            String sql = "SELECT * FROM PRODUCTS WHERE PRO_NAME LIKE ? ORDER BY PRO_ID DESC";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, "%" + keyword + "%");
 
-        rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery();
+%>
 
-        boolean hasResult = false;
+    <div class="grid">
 
-        while (rs.next()) {
-            hasResult = true;
+<%
+            while (rs.next()) {
+                hasResult = true;
 %>
         <div class="card">
-            <a href="${pageContext.request.contextPath}/product/product.jsp?id=<%= rs.getInt("PRO_ID") %>">
+            <a href="${pageContext.request.contextPath}/product/product.jsp?proId=<%= rs.getInt("PRO_ID") %>">
                 <div class="img">
                     <img src="${pageContext.request.contextPath}/images/<%= rs.getString("PRO_IMG") %>"
                          alt="<%= rs.getString("PRO_NAME") %>">
@@ -69,25 +72,34 @@
             </a>
         </div>
 <%
-        }
-}
-        if (!hasResult) {
+            }
 %>
-        <p>검색 결과가 없습니다.</p>
-<%
-        }
 
-    } catch (Exception e) {
-%>
-        <p>검색 중 오류가 발생했습니다: <%= e.getMessage() %></p>
+    </div>
+
 <%
-    } finally {
-        if (rs != null) rs.close();
-        if (pstmt != null) pstmt.close();
-        if (conn != null) conn.close();
+            if (!hasResult) {
+%>
+        <div class="panel">
+            <p>검색 결과가 없습니다.</p>
+        </div>
+<%
+            }
+
+        } catch (Exception e) {
+%>
+        <div class="panel">
+            <p>검색 중 오류가 발생했습니다: <%= e.getMessage() %></p>
+        </div>
+<%
+        } finally {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
+        }
     }
 %>
-    </div>
+
 </section>
 
 <%@ include file="footer.jsp" %>
