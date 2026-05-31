@@ -149,9 +149,9 @@ try {
         detailPstmt.executeUpdate();
 
         stockPstmt.setInt(1, cartQty);
-        stockPstmt.setInt(2, optionId);
+        stockPstmt.setInt(2, rs.getInt("OPTION_ID"));
         stockPstmt.setInt(3, cartQty);
-
+    
         int stockResult = stockPstmt.executeUpdate();
 
         if(stockResult==0){
