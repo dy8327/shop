@@ -560,7 +560,7 @@ th {
   gap: 24px;
 }
 
-.panel input,
+.panel input:not([type="radio"]),
 .panel textarea,
 .panel select {
   width: 100%;
@@ -569,6 +569,38 @@ th {
   border: 1px solid #ded2ff;
   border-radius: 12px;
   background: #fff;
+}
+
+.payment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #eee7ff;
+  border-radius: 14px;
+  background: #faf8ff;
+  cursor: pointer;
+  font-weight: 700;
+  color: #1f1645;
+}
+
+.payment-option input[type="radio"] {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  accent-color: #7658ff;
+}
+
+.payment-option:hover {
+  background: #f3edff;
+  border-color: #d8ccff;
 }
 
 /* ---------- Complete Page ---------- */
