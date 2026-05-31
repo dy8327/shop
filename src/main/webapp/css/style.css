@@ -37,6 +37,7 @@ img {
   display: block;
 }
 
+
 /* ---------- Common Layout ---------- */
 .wrap,
 .detail,
@@ -162,6 +163,12 @@ img {
 .search-area button:hover,
 .search-area a:hover {
   transform: scale(1.15);
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #77689d
 }
 
 /* ---------- Main / Hero ---------- */
@@ -404,16 +411,19 @@ aside,
 
 .main-img {
   width: 100%;
-  height: 500px;
+  height: 90%;
   border-radius: 18px;
   overflow: hidden;
   background: #f4f0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .main-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center top;
 }
 
@@ -1018,7 +1028,7 @@ body .admin-form-wrap {
   }
 
   .main-img {
-    height: 420px;
+    height: auto;
   }
 
   .admin-edit-img {
