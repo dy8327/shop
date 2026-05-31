@@ -15,6 +15,7 @@ String name = "";
 int price = 0;
 String img = "";
 String content = "";
+String category = "";
 
 ArrayList<String> colors = new ArrayList<>();
 ArrayList<String> sizes = new ArrayList<>();
@@ -24,7 +25,7 @@ StringBuilder jsonOptions = new StringBuilder("[");
 
 try {
     // 1. 상품 기본 정보 조회
-    String sql = "SELECT PRO_NAME, PRO_PRICE, PRO_IMG, PRO_CONTENT " +
+    String sql = "SELECT PRO_NAME, PRO_PRICE, PRO_IMG, PRO_CONTENT, PRO_CATEGORY " +
                  "FROM PRODUCTS WHERE PRO_ID = ?";
 
     pstmt = conn.prepareStatement(sql);
@@ -36,6 +37,7 @@ try {
         price = rs.getInt("PRO_PRICE");
         img = rs.getString("PRO_IMG");
         content = rs.getString("PRO_CONTENT");
+        category = rs.getString("PRO_CATEGORY");
     }
     
     if(rs != null) rs.close();
@@ -89,7 +91,7 @@ try {
 
 <main class="detail">
   <p class="path">    
-    HOME &gt; CLOTHING &gt; 상의 &gt; <%=name %>  
+    HOME &gt; CLOTHING &gt; <%=category %> &gt; <%=name %>  
   </p>
   
   <section class="detail-grid">
