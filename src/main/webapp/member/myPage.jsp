@@ -47,9 +47,12 @@
                 </section>
 
                 <section class="mypage-card">
-                    <h2>주문내역</h2>
-                    <p>주문내역 기능은 준비 중입니다.</p>
-                    <a class="mypage-btn" href="#">주문내역 보기</a>
+                       <h2>주문내역</h2>
+                       <p>주문한 상품 내역을 확인할 수 있습니다.</p>
+                       <a class="mypage-btn"
+                          href="${pageContext.request.contextPath}/member/memberOrderList.jsp">
+                          주문내역 보기
+                    </a>
                 </section>
 
                 <section class="mypage-card">
