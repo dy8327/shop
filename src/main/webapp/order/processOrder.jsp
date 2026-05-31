@@ -25,9 +25,12 @@ String payment = request.getParameter("payment");
 
 PreparedStatement pstmt = null;
 PreparedStatement detailPstmt = null;
+PreparedStatement stockPstmt = null;
 ResultSet rs = null;
 
 try {
+    conn.setAutoCommit(false);
+
     int totalPrice = 0;
     int deliveryFee = 3000;
     int finalPrice = 0;
@@ -107,7 +110,7 @@ try {
     pstmt.executeUpdate();
     pstmt.close();
 
-    // 5. 장바구니 다시 조회해서 ORDER_DETAIL 저장
+    // 5. 장바구니 다시 조회해서 ORDER_DETAIL 저장 밎 재고 차감
     pstmt = conn.prepareStatement(cartSql);
     pstmt.setString(1, memId);
     rs = pstmt.executeQuery();
@@ -119,6 +122,13 @@ try {
 
     detailPstmt = conn.prepareStatement(detailSql);
 
+    String stockSql = 
+        "UPDATE PRO_OPTION "+
+        "SET PRO_STOCK = PRO_STOCK-? "+
+        "WHERE OPTION_ID=? "+
+        "AND PRO_STOCK >=?";  //마이너스 재고 안되도록 방어.
+    stockPstmt = conn.prepareStatement(stockSql);
+
     while (rs.next()) {
         int proPrice = rs.getInt("PRO_PRICE");
         int cartQty = rs.getInt("CART_QTY");
@@ -129,7 +139,6 @@ try {
 
         // CART의 OPTION_ID를 ORDER_DETAIL의 PRO_OP_ID에 저장
         detailPstmt.setInt(3, rs.getInt("OPTION_ID"));
-
         detailPstmt.setString(4, rs.getString("PRO_NAME"));
         detailPstmt.setString(5, rs.getString("PRO_COLOR"));
         detailPstmt.setString(6, rs.getString("PRO_SIZE"));
@@ -138,6 +147,23 @@ try {
         detailPstmt.setInt(9, sumPrice);
 
         detailPstmt.executeUpdate();
+
+        stockPstmt.setInt(1, cartQty);
+        stockPstmt.setInt(2, optionId);
+        stockPstmt.setInt(3, cartQty);
+
+        int stockResult = stockPstmt.executeUpdate();
+
+        if(stockResult==0){
+            conn.rollback();
+    %>
+        <script>
+            alert("재고가 부족합니다. 장바구니 수량을 다시 조정해주세요.");
+            location.href=<%=request.getContextPath() %>/cart/cart.jsp;
+        </script>
+    <%
+        return;
+        }
     }
 
     rs.close();
@@ -151,16 +177,29 @@ try {
     pstmt.setString(1, memId);
     pstmt.executeUpdate();
 
+    conn.commit();
+
     // 7. 주문 완료 페이지 이동
     response.sendRedirect("orderComplete.jsp?orderId=" + orderId);
 
 } catch (Exception e) {
+    if(conn != null){
+        try{
+            conn.rollback();
+        }catch(Exception ex){}
+    }
     out.println("<h3>주문 처리 오류</h3>");
     out.println("<p>" + e.getMessage() + "</p>");
 } finally {
-    if (rs != null) try { rs.close(); } catch(Exception e) {}
-    if (detailPstmt != null) try { detailPstmt.close(); } catch(Exception e) {}
-    if (pstmt != null) try { pstmt.close(); } catch(Exception e) {}
-    if (conn != null) try { conn.close(); } catch(Exception e) {}
+    if (rs != null) 
+        rs.close();
+    if (stockPstmt != null)
+        stockPstmt.close();
+    if (detailPstmt != null) 
+        detailPstmt.close();
+    if (pstmt != null) 
+        pstmt.close(); 
+    if (conn != null) 
+        conn.close();
 }
 %>

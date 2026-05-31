@@ -1083,3 +1083,106 @@ body .admin-form-wrap {
     flex-direction: column;
   }
 }
+
+/* ===== 사이즈 추천 박스 ===== */
+
+.size-recommend-box {
+  margin-top: 28px;
+  padding: 24px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid #eee7ff;
+  box-shadow: 0 10px 30px rgba(30, 15, 80, 0.08);
+}
+
+.size-recommend-box h3 {
+  margin: 0 0 8px;
+  color: #130b3f;
+  font-size: 20px;
+}
+
+.size-recommend-box p {
+  margin: 8px 0 16px;
+  color: #77689d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.size-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.size-input-row input {
+  width: 50%;
+  padding: 12px 14px;
+  border: 1px solid #ded2ff;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.size-btn {
+  width: 100%;
+  text-align: center;
+  margin-top: 6px;
+}
+
+.size-result {
+  margin-top: 16px !important;
+  padding: 14px;
+  border-radius: 14px;
+  background: #f7f3ff;
+  color: #130b3f !important;
+  font-weight: 700;
+  text-align: center;
+}
+
+.size-result span {
+  display: inline-block;
+  margin-top: 6px;
+  color: #77689d;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media(max-width:900px) {
+  .size-input-row {
+    flex-direction: column;
+  }
+
+  .size-input-row input {
+    width: 100%;
+  }
+}
+
+/* ===== 상세페이지 재고 표시 ===== */
+
+.size-option-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.size-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stock-info {
+  display: inline-block;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: #f4f0ff;
+  color: #7658ff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.stock-info.soldout {
+  background: #ffe8e8;
+  color: #b42323;
+}

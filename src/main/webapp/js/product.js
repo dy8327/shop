@@ -57,6 +57,7 @@ colorButtons.forEach(function(btn) {
     selectedColorInput.value = selectedColor;
 
     findSelectedOption();
+    updateStockInfo();
   });
 });
 
@@ -72,6 +73,7 @@ sizeButtons.forEach(function(btn) {
     selectedSizeInput.value = selectedSize;
 
     findSelectedOption();
+    updateStockInfo();
   });
 });
 
@@ -140,4 +142,36 @@ function closeDone() {
   const url = new URL(window.location.href);
   url.searchParams.delete("cart");
   window.history.replaceState({}, document.title, url.toString());
+}
+
+function updateStockInfo() {
+  const stockInfo = document.getElementById("stockInfo");
+  const selectedColor = document.getElementById("selectedColor").value;
+  const selectedSize = document.getElementById("selectedSize").value;
+
+  if (!stockInfo) return;
+
+  if (!selectedColor || !selectedSize) {
+    stockInfo.innerHTML = "색상과 사이즈를 선택해주세요";
+    stockInfo.classList.remove("soldout");
+    return;
+  }
+
+  const selectedOption = optionList.find(function(option) {
+    return option.color === selectedColor && option.size === selectedSize;
+  });
+
+  if (!selectedOption) {
+    stockInfo.innerHTML = "선택한 옵션의 재고가 없습니다";
+    stockInfo.classList.add("soldout");
+    return;
+  }
+
+  if (selectedOption.stock <= 0) {
+    stockInfo.innerHTML = "품절";
+    stockInfo.classList.add("soldout");
+  } else {
+    stockInfo.innerHTML = "재고 " + selectedOption.stock + "개";
+    stockInfo.classList.remove("soldout");
+  }
 }
