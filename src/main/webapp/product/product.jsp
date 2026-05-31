@@ -116,8 +116,8 @@ try {
       <label>SIZE</label>      
       <div>                  
         <% for(String s : sizes) { %>
-          <button type="button" class="size" data-size="<%= s %>">            
-            <%= s %>          
+          <button type="button" class="size" data-size="<%=s %>">            
+            <%=s %>          
           </button>                  
         <% } %>
       </div>
