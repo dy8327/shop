@@ -20,10 +20,10 @@
   <a href="${pageContext.request.contextPath}/product/acc.jsp">ACC</a>
 
  <div class="right-area">
-  <div class="search-area">
-    <input type="text" name="search">
-    <h4><a href="${pageContext.request.contextPath}/search.jsp">⌕</a></h4>
-  </div>
+  <form action="${pageContext.request.contextPath}/list.jsp" method="get" class="search-area">
+    <input type="text" name="keyword" placeholder="Search">
+    <button type="submit">🔍</button>
+</form>
       <% if (loginId == null) { %>
         <a href="${pageContext.request.contextPath}/member/login.jsp">로그인</a>
         <a href="${pageContext.request.contextPath}/member/join.jsp">회원가입</a>
