@@ -135,27 +135,23 @@
             <section class="panel">
                 <h2>결제 수단</h2>
 
-                <p>
-                    <label>
-                        <input type="radio" name="payment" value="CARD" checked>
-                        카드 결제
-                    </label>
-                </p>
+            <div class="payment-list">
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="CARD" checked>
+                    <span>카드 결제</span>
+                </label>
 
-                <p>
-                    <label>
-                        <input type="radio" name="payment" value="BANK">
-                        무통장 입금
-                    </label>
-                </p>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="BANK">
+                    <span>무통장 입금</span>
+                </label>
 
-                <p>
-                    <label>
-                        <input type="radio" name="payment" value="PHONE">
-                        휴대폰 결제
-                    </label>
-                </p>
-            </section>
+                <label class="payment-option">
+                    <input type="radio" name="payment" value="PHONE">
+                    <span>휴대폰 결제</span>
+                </label>
+            </div>
+        </section>
 
             <section class="panel">
                 <h2>결제 금액</h2>
