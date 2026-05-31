@@ -20,7 +20,7 @@
   <a href="${pageContext.request.contextPath}/product/acc.jsp">ACC</a>
 
  <div class="right-area">
-  <form action="${pageContext.request.contextPath}/list.jsp" method="get" class="search-area">
+  <form action="${pageContext.request.contextPath}/search.jsp" method="get" class="search-area">
     <input type="text" name="keyword" placeholder="Search">
     <button type="submit">🔍</button>
 </form>
