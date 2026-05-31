@@ -30,14 +30,14 @@ rs = pstmt.executeQuery();
   <div>
     <h1>Style,<br>Shine,<br>Universe</h1>
     <p>우주에서 발견한 스타일, 나만의 색으로 빛나보세요.</p>
-    <a class="btn" href="${pageContext.request.contextPath}/list.jsp">SHOP NOW →</a>
+    <a class="btn" href="${pageContext.request.contextPath}/product/products.jsp">SHOP NOW →</a>
   </div>
 </section>
 
 <section class="wrap">
   <div class="title">
     <h2>NEW ARRIVALS ✦</h2>
-    <a href="${pageContext.request.contextPath}/new.jsp">더보기 →</a>
+    <a href="${pageContext.request.contextPath}/product/new.jsp">더보기 →</a>
   </div>
 
   <div class="grid">
@@ -75,7 +75,7 @@ rs = pstmt.executeQuery();
 <section class="banner">
   <h2>COSMIC RAINBOW COLLECTION</h2>
   <p>눈부신 컬러로 완성하는 나의 우주</p>
-  <a class="light" href="${pageContext.request.contextPath}/list.jsp">컬렉션 보러가기 →</a>
+  <a class="light" href="${pageContext.request.contextPath}/product/products.jsp">컬렉션 보러가기 →</a>
 </section>
 
 <%
