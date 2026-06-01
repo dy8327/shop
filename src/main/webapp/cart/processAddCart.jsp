@@ -47,8 +47,7 @@
         dao.addCart(memId, proId, optionId, cartQty);
 %>
         <script>
-            alert("장바구니에 추가되었습니다.");
-            location.href = "<%=request.getContextPath()%>/product/product.jsp?proId=<%=proId%>&cart=success";
+            location.href = "<%=request.getContextPath() %>/product/product.jsp?proId=<%=proId %>&cart=success";
         </script>
 <%
     } catch (Exception e) {
