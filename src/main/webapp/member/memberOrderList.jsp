@@ -88,7 +88,10 @@ try {
     int orderId = rs.getInt("ORDER_ID");
     String orderStatus = rs.getString("ORDER_STATUS");
 
-    if ("주문완료".equals(orderStatus)) {
+    if ("주문완료".equals(orderStatus)
+    || "배송준비중".equals(orderStatus)
+    || "배송중".equals(orderStatus)
+    || "배송완료".equals(orderStatus)) {
 %>
         <%= orderStatus %>
         <form action="${pageContext.request.contextPath}/member/requestCancel.jsp"
@@ -96,8 +99,9 @@ try {
               style="display:inline;">
             <input type="hidden" name="orderId" value="<%= orderId %>">
             <button type="submit"
+                    class="cancel-btn"
                     onclick="return confirm('주문 취소를 신청하시겠습니까?');">
-                취소신청
+                    취소신청
             </button>
         </form>
 <%
@@ -134,7 +138,10 @@ try {
 </table>
 
 <p style="margin-top:30px;">
-    <a href="${pageContext.request.contextPath}/member/myPage.jsp">마이페이지로 돌아가기</a>
+<a class="back-btn"
+   href="${pageContext.request.contextPath}/member/myPage.jsp">
+    마이페이지로 돌아가기
+</a>
 </p>
 
 </div>
