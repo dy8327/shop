@@ -972,6 +972,118 @@ body .admin-form-wrap {
   box-shadow: 0 0 0 3px rgba(155, 109, 243, 0.15);
 }
 
+.admin-product-table td.cancel-request {
+  color: #d32f2f !important;
+  font-weight: 800;
+}
+
+/* 관리자 매출관리 */
+.sales-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  margin: 26px 0 34px;
+}
+
+.sales-card {
+  background: #fff;
+  border: 1px solid #eee7ff;
+  border-radius: 18px;
+  padding: 22px 18px;
+  box-shadow: 0 8px 24px rgba(20, 12, 60, 0.08);
+}
+
+.sales-card span {
+  display: block;
+  margin-bottom: 12px;
+  color: #77689d;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sales-card strong {
+  display: block;
+  color: #130b3f;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.sales-card.total {
+  background: linear-gradient(135deg, #7658ff, #e48bd8);
+}
+
+.sales-card.total span,
+.sales-card.total strong {
+  color: #fff;
+}
+
+.sales-search-form {
+  display: flex;
+  align-items: end;
+  gap: 14px;
+  margin: 0 0 34px;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #eee7ff;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(20, 12, 60, 0.06);
+}
+
+.sales-search-form label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 700;
+  color: #130b3f;
+}
+
+.sales-search-form input[type="date"] {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d9d5e8;
+  border-radius: 10px;
+}
+
+.admin-btn.reset {
+  background: #120a3b;
+  text-align: center;
+}
+
+.order-status {
+  display: inline-block;
+  min-width: 74px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.order-status.normal {
+  background: #edf8f0;
+  color: #237a3b;
+}
+
+.order-status.dvcomplete {
+  background: #eef0ff;
+  color: #4e43b7;
+}
+
+.order-status.cancel {
+  background: #ffe8e8;
+  color: #b42323;
+}
+
+
+@media(max-width:900px){
+  .sales-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 /* ---------- My Page ---------- */
 .mypage-wrap {
   margin: 46px auto 70px;

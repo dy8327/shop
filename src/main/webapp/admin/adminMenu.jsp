@@ -16,7 +16,7 @@
   <a href="${pageContext.request.contextPath}/admin/editProduct.jsp?edit=delete">상품삭제</a>
   <a href="${pageContext.request.contextPath}/admin/editMember.jsp">회원관리</a>
   <a href="${pageContext.request.contextPath}/admin/orderManage.jsp">주문관리</a>
-  <a href="${pageContext.request.contextPath}/admin/sales.jsp">매출관리</a>
+  <a href="${pageContext.request.contextPath}/admin/salesManage.jsp">매출관리</a>
   
  <div class="right-area">
         <span><%=loginName %>님</span>
