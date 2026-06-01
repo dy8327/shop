@@ -50,7 +50,7 @@ rs = pstmt.executeQuery();
         String img = rs.getString("PRO_IMG");
     %>
 
-    <!-- 🔥 여기만 수정됨 -->
+    
     <a class="card"
        href="${pageContext.request.contextPath}/product/product.jsp?proId=<%= id %>">
 
