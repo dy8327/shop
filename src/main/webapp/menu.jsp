@@ -10,7 +10,6 @@
      style="cursor:pointer;">
     SSU
   </b>
-
   <a href="${pageContext.request.contextPath}/product/new.jsp">NEW</a>
   <a href="${pageContext.request.contextPath}/product/products.jsp">ALLCLOTHING</a>
   <a href="${pageContext.request.contextPath}/product/top.jsp">TOP</a>
@@ -35,12 +34,8 @@
             <a href="${pageContext.request.contextPath}/member/myPage.jsp">마이페이지</a>
             <% } %>
             <a href="${pageContext.request.contextPath}/member/logout.jsp">로그아웃</a>
-
-        
     <%
         }
     %>
-    
 </div>
-
 </header>
