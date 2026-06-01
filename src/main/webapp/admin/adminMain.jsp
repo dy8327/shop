@@ -50,7 +50,7 @@
         %>
             <tr>
                 <td><%= i + 1 %></td>
-                <td><%= shop.getProCategory() %></td>
+                <td><%=shop.getProCategory() %></td>
                 <td>
                     <img 
                         src="${pageContext.request.contextPath}/images/<%= shop.getProImg() %>" 
