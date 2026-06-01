@@ -22,31 +22,39 @@
 <meta charset="UTF-8">
 <title>내 주문내역</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-
 </head>
 
 <body>
 
 <%@ include file="../menu.jsp" %>
 
-<div class="order-wrap">
+<div class="wrap">
 
-<h1>내 주문내역</h1>
-<p>내가 주문한 상품 목록입니다.</p>
+    <div class="panel">
+        <h1>내 주문내역</h1>
+        <p>주문번호 기준으로 주문 상품과 배송 정보를 확인할 수 있습니다.</p>
 
-<table class="order-table">
-<tr>
-    <th>주문일</th>
-    <th>상품명</th>
-    <th>컬러</th>
-    <th>사이즈</th>
-    <th>수량</th>
-    <th>단가</th>
-    <th>합계금액</th>
-    <th>배송지</th>
-    <th>연락처</th>
-    <th>주문상태</th>
-</tr>
+        <p style="margin-top:20px;">
+            <a class="outline" href="${pageContext.request.contextPath}/member/myPage.jsp">
+                마이페이지로 돌아가기
+            </a>
+            <a class="dark" href="${pageContext.request.contextPath}/product/products.jsp">
+                쇼핑 계속하기
+            </a>
+        </p>
+    </div>
+
+    <div class="order-table">
+
+        <table>
+            <tr>
+                <th>주문일</th>
+                <th>주문상품</th>
+                <th>총 결제금액</th>
+                <th>배송지</th>
+                <th>연락처</th>
+                <th>주문상태</th>
+            </tr>
 
 <%
 PreparedStatement pstmt = null;
@@ -54,13 +62,16 @@ ResultSet rs = null;
 
 try {
     String sql =
-        "SELECT o.ORDER_ID, d.PRO_NAME, d.PRO_COLOR, d.PRO_SIZE, d.QUANTITY, " +
-        "d.PRO_PRICE, d.SUM_PRICE, " +
+        "SELECT o.ORDER_ID, " +
+        "LISTAGG(d.PRO_NAME || ' / ' || d.PRO_COLOR || ' / ' || d.PRO_SIZE || ' / ' || d.QUANTITY || '개', '<br>') " +
+        "WITHIN GROUP (ORDER BY d.PRO_NAME) AS PRODUCT_INFO, " +
+        "SUM(d.SUM_PRICE) AS ORDER_SUM_PRICE, " +
         "o.RECEIVER_ADDR, o.RECEIVER_PHONE, o.ORDER_STATUS, o.ORDER_DATE " +
         "FROM ORDERS o " +
         "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
         "WHERE o.MEM_ID = ? " +
-        "ORDER BY o.ORDER_DATE DESC";
+        "GROUP BY o.ORDER_ID, o.RECEIVER_ADDR, o.RECEIVER_PHONE, o.ORDER_STATUS, o.ORDER_DATE " +
+        "ORDER BY o.ORDER_DATE DESC, o.ORDER_ID DESC";
 
     pstmt = conn.prepareStatement(sql);
     pstmt.setString(1, memId);
@@ -70,64 +81,62 @@ try {
 
     while(rs.next()){
         hasOrder = true;
+
+        int orderId = rs.getInt("ORDER_ID");
+        String orderStatus = rs.getString("ORDER_STATUS");
 %>
 
-<tr>
-    <td><%= rs.getDate("ORDER_DATE") %></td>
-    <td><%= rs.getString("PRO_NAME") %></td>
-    <td><%= rs.getString("PRO_COLOR") %></td>
-    <td><%= rs.getString("PRO_SIZE") %></td>
-    <td><%= rs.getInt("QUANTITY") %></td>
-    <td><%= rs.getInt("PRO_PRICE") %>원</td>
-    <td><%= rs.getInt("SUM_PRICE") %>원</td>
-    <td><%= rs.getString("RECEIVER_ADDR") %></td>
-    <td><%= rs.getString("RECEIVER_PHONE") %></td>
-    
-    <td>
-<%
-    int orderId = rs.getInt("ORDER_ID");
-    String orderStatus = rs.getString("ORDER_STATUS");
+            <tr>
+                <td><%= rs.getDate("ORDER_DATE") %></td>
+                <td><%= rs.getString("PRODUCT_INFO") %></td>
+                <td><strong><%= rs.getInt("ORDER_SUM_PRICE") %>원<br>(배송비 제외)</strong></td>
+                <td><%= rs.getString("RECEIVER_ADDR") %></td>
+                <td><%= rs.getString("RECEIVER_PHONE") %></td>
+                <td>
+                    <strong><%= orderStatus %></strong>
 
-    if ("주문완료".equals(orderStatus)
-    || "배송준비중".equals(orderStatus)
-    || "배송중".equals(orderStatus)
+<%
+        if ("주문완료".equals(orderStatus) || "배송준비중".equals(orderStatus)|| "배송중".equals(orderStatus)
     || "배송완료".equals(orderStatus)) {
 %>
-        <%= orderStatus %>
-        <form action="${pageContext.request.contextPath}/member/requestCancel.jsp"
-              method="post"
-              style="display:inline;">
-            <input type="hidden" name="orderId" value="<%= orderId %>">
-            <button type="submit"
-                    class="cancel-btn"
-                    onclick="return confirm('주문 취소를 신청하시겠습니까?');">
-                    취소신청
-            </button>
-        </form>
-<%
-    } else {
-%>
-        <%= orderStatus %>
-<%
-    }
-%>
-</td>
+                    <form action="${pageContext.request.contextPath}/member/requestCancel.jsp"
+                          method="post"
+                          style="margin-top:8px;">
+                        <input type="hidden" name="orderId" value="<%= orderId %>">
 
-</tr>
+                        <button type="submit"
+                                class="cancel-btn"
+                                onclick="return confirm('주문 취소를 신청하시겠습니까?');">
+                            취소신청
+                        </button>
+                    </form>
+<%
+        }
+%>
+                </td>
+            </tr>
 
 <%
     }
 
     if(!hasOrder){
 %>
-<tr>
-    <td colspan="10" class="empty">주문내역이 없습니다.</td>
-</tr>
+            <tr>
+                <td colspan="6" style="text-align:center; padding:40px;">
+                    주문내역이 없습니다.
+                </td>
+            </tr>
 <%
     }
 
 } catch(Exception e){
-    out.println("<tr><td colspan='10'>주문내역 조회 오류: " + e.getMessage() + "</td></tr>");
+%>
+            <tr>
+                <td colspan="6" style="text-align:center; padding:40px; color:red;">
+                    주문내역 조회 오류: <%= e.getMessage() %>
+                </td>
+            </tr>
+<%
 } finally {
     if(rs != null) try { rs.close(); } catch(Exception e) {}
     if(pstmt != null) try { pstmt.close(); } catch(Exception e) {}
@@ -135,14 +144,9 @@ try {
 }
 %>
 
-</table>
+        </table>
 
-<p style="margin-top:30px;">
-<a class="back-btn"
-   href="${pageContext.request.contextPath}/member/myPage.jsp">
-    마이페이지로 돌아가기
-</a>
-</p>
+    </div>
 
 </div>
 
