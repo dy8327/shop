@@ -88,7 +88,10 @@ try {
     int orderId = rs.getInt("ORDER_ID");
     String orderStatus = rs.getString("ORDER_STATUS");
 
-    if ("주문완료".equals(orderStatus)) {
+    if ("주문완료".equals(orderStatus)
+    || "배송준비중".equals(orderStatus)
+    || "배송중".equals(orderStatus)
+    || "배송완료".equals(orderStatus)) {
 %>
         <%= orderStatus %>
         <form action="${pageContext.request.contextPath}/member/requestCancel.jsp"

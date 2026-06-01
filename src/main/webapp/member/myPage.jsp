@@ -52,14 +52,17 @@
                        <a class="mypage-btn"
                           href="${pageContext.request.contextPath}/member/memberOrderList.jsp">
                           주문내역 보기
-                    </a>
+                       </a>
                 </section>
 
                 <section class="mypage-card">
-                    <h2>배송정보</h2>
-                    <p>배송정보 조회 기능은 준비 중입니다.</p>
-                    <a class="mypage-btn" href="#">배송정보 확인</a>
-                </section>
+                      <h2>배송정보</h2>
+                      <p>주문한 상품의 배송상태를 확인할 수 있습니다.</p>
+                      <a class="mypage-btn"
+                         href="${pageContext.request.contextPath}/member/deliveryInfo.jsp">
+                         배송정보 확인
+                       </a>
+               </section>
 
                 <section class="mypage-card">
                     <h2>비밀번호 변경</h2>

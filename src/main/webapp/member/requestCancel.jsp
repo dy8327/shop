@@ -24,7 +24,7 @@ try {
         "SET ORDER_STATUS = '취소요청' " +
         "WHERE ORDER_ID = ? " +
         "AND MEM_ID = ? " +
-        "AND ORDER_STATUS = '주문완료'";
+        "AND ORDER_STATUS IN ('주문완료', '배송준비중', '배송중', '배송완료')";
 
     pstmt = conn.prepareStatement(sql);
     pstmt.setInt(1, Integer.parseInt(orderId));
