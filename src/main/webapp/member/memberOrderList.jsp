@@ -36,6 +36,7 @@
 
 <table class="order-table">
 <tr>
+    <th>주문일</th>
     <th>상품명</th>
     <th>컬러</th>
     <th>사이즈</th>
@@ -45,7 +46,6 @@
     <th>배송지</th>
     <th>연락처</th>
     <th>주문상태</th>
-    <th>주문일</th>
 </tr>
 
 <%
@@ -73,6 +73,7 @@ try {
 %>
 
 <tr>
+    <td><%= rs.getDate("ORDER_DATE") %></td>
     <td><%= rs.getString("PRO_NAME") %></td>
     <td><%= rs.getString("PRO_COLOR") %></td>
     <td><%= rs.getString("PRO_SIZE") %></td>
@@ -82,7 +83,6 @@ try {
     <td><%= rs.getString("RECEIVER_ADDR") %></td>
     <td><%= rs.getString("RECEIVER_PHONE") %></td>
     <td><%= rs.getString("ORDER_STATUS") %></td>
-    <td><%= rs.getDate("ORDER_DATE") %></td>
 </tr>
 
 <%
