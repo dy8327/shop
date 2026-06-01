@@ -34,11 +34,15 @@
 
 <!doctype html>
 <html lang="ko">
+
+
 <head>
 <meta charset="UTF-8">
 <title>주문 / 결제</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
+
 
 <body class="soft">
 
@@ -123,7 +127,27 @@
 
                 <input type="text" name="receiverName" placeholder="받는 사람" required>
                 <input type="text" name="receiverPhone" placeholder="연락처" required>
-                <input type="text" name="receiverAddress" placeholder="배송 주소" required>
+                <div class="address-row">
+                   <input type="text" id="postcode"
+                       placeholder="우편번호" readonly>
+
+                   <button type="button"
+                       onclick="execDaumPostcode()">
+                   주소검색
+                   </button>
+                </div>
+
+                <input type="text"
+                       id="address"
+                       name="receiverAddress"
+                       placeholder="배송 주소"
+                       readonly
+                       required>
+
+                <input type="text"
+                       id="detailAddress"
+                       placeholder="상세 주소">
+
                 <textarea name="deliveryMemo" rows="4" placeholder="배송 요청사항"></textarea>
             </section>
 
@@ -196,6 +220,27 @@
 </main>
 
 <%@ include file="/footer.jsp" %>
+
+
+
+<script>
+function execDaumPostcode() {
+
+    new daum.Postcode({
+        oncomplete: function(data) {
+
+            document.getElementById("postcode").value =
+                data.zonecode;
+
+            document.getElementById("address").value =
+                data.roadAddress;
+
+            document.getElementById("detailAddress").focus();
+        }
+    }).open();
+}
+
+</script>
 
 </body>
 </html>
