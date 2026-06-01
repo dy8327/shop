@@ -78,8 +78,15 @@ try {
     <td>
         <%=rs.getString("RECEIVER_PHONE") %>
     </td>
-    <td>
-        <%=rs.getString("ORDER_STATUS") %>
+    <%
+        String orderStatus = rs.getString("ORDER_STATUS");
+         if (orderStatus != null) {
+        orderStatus = orderStatus.trim();
+    }
+        String statusClass = "취소요청".equals(orderStatus) ? "cancel-request" : "";
+    %>
+    <td class="<%=statusClass %>">
+        <%=orderStatus %>
     </td>
     <td>
         <%=rs.getDate("ORDER_DATE") %>
