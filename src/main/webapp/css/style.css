@@ -267,6 +267,10 @@ button:disabled,
   opacity: .6;
 }
 
+.admin-btn:hover{
+  background:#2980b9;
+}
+
 /* ---------- Product Grid / Card ---------- */
 .grid {
   display: grid;
