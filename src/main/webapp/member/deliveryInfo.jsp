@@ -42,6 +42,8 @@ if (memId == null) {
     <th>연락처</th>
     <th>배송지</th>
     <th>배송메모</th>
+    <th>택배사</th>
+    <th>송장번호</th>
     <th>배송상태</th>
 </tr>
 
@@ -50,14 +52,16 @@ PreparedStatement pstmt = null;
 ResultSet rs = null;
 
 try {
-    String sql =
-        "SELECT o.ORDER_ID, o.ORDER_DATE, o.RECEIVER_NAME, " +
-        "o.RECEIVER_PHONE, o.RECEIVER_ADDR, o.DELIVERY_MEMO, " +
-        "o.ORDER_STATUS, d.PRO_NAME " +
-        "FROM ORDERS o " +
-        "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
-        "WHERE o.MEM_ID = ? " +
-        "ORDER BY o.ORDER_DATE DESC";
+String sql =
+    "SELECT o.ORDER_ID, o.ORDER_DATE, o.RECEIVER_NAME, " +
+    "o.RECEIVER_PHONE, o.RECEIVER_ADDR, o.DELIVERY_MEMO, " +
+    "o.DELIVERY_COMPANY, o.TRACKING_NUMBER, " +
+    "o.ORDER_STATUS, d.PRO_NAME " +
+    "FROM ORDERS o " +
+    "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
+    "WHERE o.MEM_ID = ? " +
+    "AND o.ORDER_STATUS IN ('배송준비중', '배송중', '배송완료') " +
+    "ORDER BY o.ORDER_DATE DESC";
 
     pstmt = conn.prepareStatement(sql);
     pstmt.setString(1, memId);
@@ -68,12 +72,22 @@ try {
     while (rs.next()) {
         hasDelivery = true;
 
-        String orderStatus = rs.getString("ORDER_STATUS");
-        String memo = rs.getString("DELIVERY_MEMO");
+String orderStatus = rs.getString("ORDER_STATUS");
+String memo = rs.getString("DELIVERY_MEMO");
+String company = rs.getString("DELIVERY_COMPANY");
+String tracking = rs.getString("TRACKING_NUMBER");
 
-        if (memo == null || memo.trim().equals("")) {
-            memo = "배송메모 없음";
-        }
+if (memo == null || memo.trim().equals("")) {
+    memo = "배송메모 없음";
+}
+
+if (company == null || company.trim().equals("")) {
+    company = "미등록";
+}
+
+if (tracking == null || tracking.trim().equals("")) {
+    tracking = "미등록";
+}
 %>
 
 <tr>
@@ -84,6 +98,8 @@ try {
     <td><%= rs.getString("RECEIVER_PHONE") %></td>
     <td><%= rs.getString("RECEIVER_ADDR") %></td>
     <td><%= memo %></td>
+    <td><%= company %></td>
+    <td><%= tracking %></td>
     <td><strong><%= orderStatus %></strong></td>
 </tr>
 
@@ -93,13 +109,13 @@ try {
     if (!hasDelivery) {
 %>
 <tr>
-    <td colspan="8" class="empty">배송정보가 없습니다.</td>
+    <td colspan="10" class="empty">배송정보가 없습니다.</td>
 </tr>
 <%
     }
 
 } catch(Exception e) {
-    out.println("<tr><td colspan='8'>배송정보 조회 오류: " + e.getMessage() + "</td></tr>");
+   out.println("<tr><td colspan='10'>배송정보 조회 오류: " + e.getMessage() + "</td></tr>");
 } finally {
     if(rs != null) try { rs.close(); } catch(Exception e) {}
     if(pstmt != null) try { pstmt.close(); } catch(Exception e) {}
