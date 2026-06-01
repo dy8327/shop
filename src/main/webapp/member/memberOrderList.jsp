@@ -23,31 +23,6 @@
 <title>내 주문내역</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 
-<style>
-.order-wrap{
-    width:1200px;
-    margin:50px auto;
-}
-.order-table{
-    width:100%;
-    border-collapse:collapse;
-    background:#fff;
-    margin-top:20px;
-}
-.order-table th,
-.order-table td{
-    border:1px solid #ddd;
-    padding:12px;
-    text-align:center;
-}
-.order-table th{
-    background:#f5f5f5;
-}
-.empty{
-    padding:40px;
-    text-align:center;
-}
-</style>
 </head>
 
 <body>
