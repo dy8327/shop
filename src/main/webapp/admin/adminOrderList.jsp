@@ -11,32 +11,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원 주문내역</title>
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-
-<style>
-.admin-table{
-    width:100%;
-    border-collapse:collapse;
-    background:#fff;
-    margin-top:20px;
-}
-.admin-table th,
-.admin-table td{
-    border:1px solid #ddd;
-    padding:12px;
-    text-align:center;
-}
-.admin-table th{
-    background:#f5f5f5;
-}
-.delivery-info{
-    font-size:0.9em;
-    color:#555;
-    line-height:1.5;
-}
-</style>
-
 </head>
 
 <body>
@@ -89,32 +64,25 @@ try {
 %>
 
 <tr>
-    <td><%= rs.getString("MEM_NAME") %></td>
-    <td><%= rs.getString("MEM_ID") %></td>
-
-    <td><%= rs.getString("PRO_NAME") %></td>
-
-    <td><%= rs.getString("PRO_COLOR") %></td>
-    <td><%= rs.getString("PRO_SIZE") %></td>
-
-    <td><%= rs.getInt("QUANTITY") %></td>
-    <td><%= rs.getInt("PRO_PRICE") %></td>
-    <td><%= rs.getInt("SUM_PRICE") %></td>
-
+    <td><%=rs.getString("MEM_NAME") %></td>
+    <td><%=rs.getString("MEM_ID") %></td>
+    <td><%=rs.getString("PRO_NAME") %></td>
+    <td><%=rs.getString("PRO_COLOR") %></td>
+    <td><%=rs.getString("PRO_SIZE") %></td>
+    <td><%=rs.getInt("QUANTITY") %></td>
+    <td><%=rs.getInt("PRO_PRICE") %></td>
+    <td><%=rs.getInt("SUM_PRICE") %></td>
     <td class="delivery-info">
-        <%= rs.getString("RECEIVER_ADDR") %>
+        <%=rs.getString("RECEIVER_ADDR") %>
     </td>
-
     <td>
-        <%= rs.getString("RECEIVER_PHONE") %>
+        <%=rs.getString("RECEIVER_PHONE") %>
     </td>
-
     <td>
-        <%= rs.getString("ORDER_STATUS") %>
+        <%=rs.getString("ORDER_STATUS") %>
     </td>
-
     <td>
-        <%= rs.getDate("ORDER_DATE") %>
+        <%=rs.getDate("ORDER_DATE") %>
     </td>
 </tr>
 
@@ -131,8 +99,6 @@ try {
 %>
 
 </table>
-
 </div>
-
 </body>
 </html>

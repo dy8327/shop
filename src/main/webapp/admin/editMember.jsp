@@ -8,34 +8,6 @@
     <meta charset="UTF-8">
     <title>회원 관리</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <style>
-        .admin-table{
-            width:100%;
-            border-collapse:collapse;
-            background:#fff;
-            margin-top:20px;
-        }
-        .admin-table th,
-        .admin-table td{
-            border:1px solid #ddd;
-            padding:12px;
-            text-align:center;
-        }
-        .admin-table th{
-            background:#f5f5f5;
-        }
-        .admin-btn{
-            display:inline-block;
-            padding:5px 10px;
-            text-decoration:none;
-            background:#3498db;
-            color:white;
-            border-radius:3px;
-        }
-        .admin-btn:hover{
-            background:#2980b9;
-        }
-    </style>
 </head>
 <body>
 
@@ -66,10 +38,10 @@
                 while(rs.next()){
         %>
         <tr>
-            <td><%= rs.getString("MEM_ID") %></td>
-            <td><%= rs.getString("MEM_NAME") %></td>
-            <td><%= rs.getString("MEM_GRADE") %></td>
-            <td><%= rs.getString("MEM_PHONE") %></td>
+            <td><%=rs.getString("MEM_ID") %></td>
+            <td><%=rs.getString("MEM_NAME") %></td>
+            <td><%=rs.getString("MEM_GRADE") %></td>
+            <td><%=rs.getString("MEM_PHONE") %></td>
             <td>
                 <a href="adminOrderList.jsp?id=<%= rs.getString("MEM_ID") %>" class="admin-btn">
                     주문내역
