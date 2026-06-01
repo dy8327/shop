@@ -133,7 +133,7 @@ try {
 </table>
 
 <p style="margin-top:30px;">
-    <a href="${pageContext.request.contextPath}/member/mypage.jsp">마이페이지로 돌아가기</a>
+    <a href="${pageContext.request.contextPath}/member/myPage.jsp">마이페이지로 돌아가기</a>
 </p>
 
 </div>
