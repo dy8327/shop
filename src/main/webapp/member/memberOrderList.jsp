@@ -99,8 +99,9 @@ try {
               style="display:inline;">
             <input type="hidden" name="orderId" value="<%= orderId %>">
             <button type="submit"
+                    class="cancel-btn"
                     onclick="return confirm('주문 취소를 신청하시겠습니까?');">
-                취소신청
+                    취소신청
             </button>
         </form>
 <%
