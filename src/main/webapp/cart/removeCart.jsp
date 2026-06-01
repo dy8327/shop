@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
-<%@ include file="/dbconn.jsp" %>
+<%@ page import="dao.CartDAO" %>
+<%@ page import="dto.CartItem" %>
+<%@ include file="../dbconn.jsp" %>
 
 <%
 request.setCharacterEncoding("UTF-8");
@@ -31,23 +32,16 @@ if (cartIdParam == null || cartIdParam.equals("")) {
 
 int cartId = Integer.parseInt(cartIdParam);
 
-PreparedStatement pstmt = null;
-
 try {
-    String sql = "DELETE FROM CART WHERE CART_ID = ? AND MEM_ID = ?";
+    CartDAO dao = new CartDAO(conn);
 
-    pstmt = conn.prepareStatement(sql);
-    pstmt.setInt(1, cartId);
-    pstmt.setString(2, memId);
-
-    pstmt.executeUpdate();
+    dao.removeCart(cartId, memId);
 
     response.sendRedirect(request.getContextPath() + "/cart/cart.jsp");
 
 } catch (Exception e) {
     out.println("장바구니 삭제 오류: " + e.getMessage());
 } finally {
-    if (pstmt != null) try { pstmt.close(); } catch(Exception e) {}
     if (conn != null) try { conn.close(); } catch(Exception e) {}
 }
 %>

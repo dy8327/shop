@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="dao.CartDAO" %>
+<%@ page import="dto.CartItem" %>
 <%@ include file="../dbconn.jsp" %>
 
 <%
@@ -7,6 +8,15 @@
 
     String memId = (String) session.getAttribute("memId");
 
+    if (memId == null) {
+%>
+        <script>
+            alert("로그인이 필요합니다.");
+            location.href = "<%=request.getContextPath()%>/member/login.jsp";
+        </script>
+<%
+        return;
+    }
 
     String cartIdStr = request.getParameter("cartId");
     String action = request.getParameter("action");
@@ -23,15 +33,15 @@
 
     int cartId = Integer.parseInt(cartIdStr);
 
-    PreparedStatement pstmt = null;
-
     try {
-        String sql = "";
+        CartDAO dao = new CartDAO(conn);
 
         if ("up".equals(action)) {
-            sql = "UPDATE CART SET CART_QTY = CART_QTY + 1 WHERE CART_ID = ? AND MEM_ID = ?";
+            dao.increaseQty(cartId, memId);
+
         } else if ("down".equals(action)) {
-            sql = "UPDATE CART SET CART_QTY = CART_QTY - 1 WHERE CART_ID = ? AND MEM_ID = ? AND CART_QTY > 1";
+            dao.decreaseQty(cartId, memId);
+
         } else {
 %>
             <script>
@@ -42,17 +52,11 @@
             return;
         }
 
-        pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, cartId);
-        pstmt.setString(2, memId);
-        pstmt.executeUpdate();
-
         response.sendRedirect("cart.jsp");
 
     } catch (Exception e) {
         out.println("수량 변경 오류: " + e.getMessage());
     } finally {
-        if (pstmt != null) pstmt.close();
-        if (conn != null) conn.close();
+        if (conn != null) try { conn.close(); } catch(Exception e) {}
     }
 %>
