@@ -66,8 +66,11 @@
 
                 <section class="mypage-card">
                     <h2>비밀번호 변경</h2>
-                    <p>비밀번호 변경 기능은 준비 중입니다.</p>
-                    <a class="mypage-btn outline-btn" href="#">비밀번호 변경</a>
+                    <p>비밀번호 변경이 가능합니다.</p>
+                    <a class="mypage-btn outline-btn"
+                    href="${pageContext.request.contextPath}/member/changePw.jsp">
+                    비밀번호 변경
+                    </a>
                 </section>
 
             </div>
