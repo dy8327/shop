@@ -1319,7 +1319,23 @@ body .admin-form-wrap {
   background:linear-gradient(135deg,#7658ff,#f1a2d9) !important;
   cursor:pointer !important;
 }
-
 .order-table button.cancel-btn:hover{
+  opacity:0.9;
+}
+
+/*마이페이지 돌아가기 버튼*/
+.back-btn{
+  display:inline-block;
+  border:none;
+  border-radius:999px;
+  padding:12px 24px;
+  font-size:14px;
+  font-weight:800;
+  color:#fff !important;
+  background:linear-gradient(135deg,#7658ff,#f1a2d9);
+  text-decoration:none;
+  cursor:pointer;
+}
+.back-btn:hover{
   opacity:0.9;
 }
