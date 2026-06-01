@@ -6,7 +6,10 @@
 %>
 
 <header class="nav">
-  <h3><a href="${pageContext.request.contextPath}/index.jsp">SSU</a></h3>
+ <b onclick="location.href='${pageContext.request.contextPath}/index.jsp'"
+     style="cursor:pointer;">
+    SSU
+  </b>
   <a href="${pageContext.request.contextPath}/admin/adminMain.jsp">관리자홈</a>
   <a href="${pageContext.request.contextPath}/admin/addProduct.jsp">상품등록</a>
   <a href="${pageContext.request.contextPath}/admin/editProduct.jsp?edit=update">상품수정</a>

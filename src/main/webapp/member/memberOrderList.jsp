@@ -54,7 +54,7 @@ ResultSet rs = null;
 
 try {
     String sql =
-        "SELECT d.PRO_NAME, d.PRO_COLOR, d.PRO_SIZE, d.QUANTITY, " +
+        "SELECT o.ORDER_ID, d.PRO_NAME, d.PRO_COLOR, d.PRO_SIZE, d.QUANTITY, " +
         "d.PRO_PRICE, d.SUM_PRICE, " +
         "o.RECEIVER_ADDR, o.RECEIVER_PHONE, o.ORDER_STATUS, o.ORDER_DATE " +
         "FROM ORDERS o " +
@@ -82,7 +82,33 @@ try {
     <td><%= rs.getInt("SUM_PRICE") %>원</td>
     <td><%= rs.getString("RECEIVER_ADDR") %></td>
     <td><%= rs.getString("RECEIVER_PHONE") %></td>
-    <td><%= rs.getString("ORDER_STATUS") %></td>
+    
+    <td>
+<%
+    int orderId = rs.getInt("ORDER_ID");
+    String orderStatus = rs.getString("ORDER_STATUS");
+
+    if ("주문완료".equals(orderStatus)) {
+%>
+        <%= orderStatus %>
+        <form action="${pageContext.request.contextPath}/member/requestCancel.jsp"
+              method="post"
+              style="display:inline;">
+            <input type="hidden" name="orderId" value="<%= orderId %>">
+            <button type="submit"
+                    onclick="return confirm('주문 취소를 신청하시겠습니까?');">
+                취소신청
+            </button>
+        </form>
+<%
+    } else {
+%>
+        <%= orderStatus %>
+<%
+    }
+%>
+</td>
+
 </tr>
 
 <%

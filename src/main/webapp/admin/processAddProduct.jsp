@@ -37,8 +37,8 @@ if(proPriceStr == null || proPriceStr.trim().equals("")){
             uploadDir.mkdirs();
         }
         filePart.write(uploadPath+File.separator+filename);
-        
     }
+
 
     //DB 정보저장
     Shop shop = new Shop();

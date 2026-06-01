@@ -1288,3 +1288,23 @@ body .admin-form-wrap {
   background: #ffe8e8;
   color: #b42323;
 }
+
+/*우편번호*/
+.address-row{
+  display:flex;
+  gap:8px;
+  margin:10px 0;
+}
+.address-row input{
+  flex:1;
+}
+.address-row button{
+  width:100px;
+  border:none;
+  border-radius:10px;
+  background:#120a3b;
+  color:white;
+  cursor:pointer;
+}
+
+
