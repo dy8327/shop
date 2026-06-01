@@ -83,9 +83,9 @@ try {
          if (orderStatus != null) {
         orderStatus = orderStatus.trim();
     }
-        String statusClass = "취소요청".equals(orderStatus) ? "cancel-request" : "";
+       /* String statusClass = "취소요청".equals(orderStatus) ? "cancel-request" : "";*/
     %>
-    <td class="<%=statusClass %>">
+    <td style="<%="취소요청".equals(orderStatus) ? "color:red; font-weight:900;" : "" %>">
         <%=orderStatus %>
     </td>
     <td>
