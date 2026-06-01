@@ -49,19 +49,19 @@
                     Shop shop = productList.get(i);
         %>
             <tr>
-                <td><%= i + 1 %></td>
+                <td><%=i + 1 %></td>
                 <td><%=shop.getProCategory() %></td>
                 <td>
                     <img 
-                        src="${pageContext.request.contextPath}/images/<%= shop.getProImg() %>" 
-                        alt="<%= shop.getProName() %>"
+                        src="${pageContext.request.contextPath}/images/<%=shop.getProImg() %>" 
+                        alt="<%=shop.getProName() %>"
                         class="admin-thumb"
                     >
                 </td>
-                <td class="product-name"><%= shop.getProName() %></td>
-                <td><%= String.format("%,d", shop.getProPrice()) %>원</td>
-                <td><%= shop.getProColor() %></td>
-                <td><%= shop.getProSize() %></td>
+                <td class="product-name"><%=shop.getProName() %></td>
+                <td><%=String.format("%,d", shop.getProPrice()) %>원</td>
+                <td><%=shop.getProColor() %></td>
+                <td><%=shop.getProSize() %></td>
                 <td><%
     int stock = shop.getProStock();
 
@@ -71,11 +71,11 @@
 <%
     } else if (stock <= 5) {
 %>
-    <span class="stock low"><%= stock %>개</span>
+    <span class="stock low"><%=stock %>개</span>
 <%
     } else {
 %>
-    <span class="stock normal"><%= stock %>개</span>
+    <span class="stock normal"><%=stock %>개</span>
 <%
     }
 %>
