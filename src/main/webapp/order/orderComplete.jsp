@@ -31,6 +31,6 @@ String orderId = request.getParameter("orderId");
         </div>
     </div>
 </main>
-
+<%@ include file="/footer.jsp" %>
 </body>
 </html>
