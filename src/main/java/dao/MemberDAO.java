@@ -59,4 +59,23 @@ public int join(Member member) throws SQLException{
         pstmt.close();
 }
 }
+
+public String getCustomerKey(String memId) throws SQLException {
+    String customerKey = null;
+
+    String sql = "SELECT CUSTOMER_KEY FROM MEMBERS WHERE MEM_ID = ?";
+
+    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, memId);
+
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                customerKey = rs.getString("CUSTOMER_KEY");
+            }
+        }
+    }
+
+    return customerKey;
+}
+
 }
