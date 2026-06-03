@@ -326,4 +326,64 @@ public class OrderDAO {
         pstmt.executeUpdate();
     }
 }
+
+    // 관리자 - 특정 회원 주문내역 조회
+    public List<OrderDetailDTO> getMemberOrderList(String memId) throws Exception {
+        List<OrderDetailDTO> orderList = new ArrayList<>();
+
+        String sql =
+            "SELECT m.MEM_ID, m.MEM_NAME, " +
+            "d.PRO_NAME, d.PRO_COLOR, d.PRO_SIZE, d.QUANTITY, d.PRO_PRICE, d.SUM_PRICE, " +
+            "o.RECEIVER_ADDR, o.RECEIVER_PHONE, o.ORDER_STATUS, " +
+            "TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS ORDER_DATE " +
+            "FROM ORDERS o " +
+            "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
+            "JOIN MEMBERS m ON o.MEM_ID = m.MEM_ID " +
+            "WHERE o.MEM_ID = ? " +
+            "ORDER BY o.ORDER_DATE DESC";
+
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, memId);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                OrderDetailDTO order = new OrderDetailDTO();
+
+                order.setMemId(rs.getString("MEM_ID"));
+                order.setMemName(rs.getString("MEM_NAME"));
+
+                order.setProName(rs.getString("PRO_NAME"));
+                order.setProColor(rs.getString("PRO_COLOR"));
+                order.setProSize(rs.getString("PRO_SIZE"));
+                order.setQuantity(rs.getInt("QUANTITY"));
+                order.setProPrice(rs.getInt("PRO_PRICE"));
+                order.setSumPrice(rs.getInt("SUM_PRICE"));
+
+                order.setReceiverAddr(rs.getString("RECEIVER_ADDR"));
+                order.setReceiverPhone(rs.getString("RECEIVER_PHONE"));
+
+                String orderStatus = rs.getString("ORDER_STATUS");
+                if (orderStatus != null) {
+                    orderStatus = orderStatus.trim();
+                }
+
+                order.setOrderStatus(orderStatus);
+                order.setOrderDate(rs.getString("ORDER_DATE"));
+
+                orderList.add(order);
+            }
+
+        } finally {
+            if (rs != null) 
+                rs.close();
+            if (pstmt != null) 
+                pstmt.close();
+        }
+
+        return orderList;
+    }
 }

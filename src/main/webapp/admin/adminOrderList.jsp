@@ -1,9 +1,20 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="dao.OrderDAO" %>
+<%@ page import="dto.OrderDetailDTO" %>
 <%@ include file="../dbconn.jsp" %>
 
 <%
-    String memId = request.getParameter("id"); // 회원ID
+    String memId = request.getParameter("id");
+
+    List<OrderDetailDTO> orderList = new ArrayList<>();
+
+    try {
+        OrderDAO orderDAO = new OrderDAO(conn);
+        orderList = orderDAO.getMemberOrderList(memId);
+    } catch(Exception e) {
+        out.println("<script>alert('주문내역 조회 오류: " + e.getMessage() + "');</script>");
+    }
 %>
 
 <!DOCTYPE html>
@@ -41,68 +52,40 @@
 </tr>
 
 <%
-PreparedStatement pstmt = null;
-ResultSet rs = null;
-
-try {
-
-    String sql =
-        "SELECT m.MEM_ID, m.MEM_NAME, " +
-        "d.PRO_NAME, d.PRO_COLOR, d.PRO_SIZE, d.QUANTITY, d.PRO_PRICE, d.SUM_PRICE, " +
-        "o.RECEIVER_ADDR, o.RECEIVER_PHONE, o.ORDER_STATUS, o.ORDER_DATE " +
-        "FROM ORDERS o " +
-        "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
-        "JOIN MEMBERS m ON o.MEM_ID = m.MEM_ID " +
-        "WHERE o.MEM_ID = ? " +
-        "ORDER BY o.ORDER_DATE DESC";
-
-    pstmt = conn.prepareStatement(sql);
-    pstmt.setString(1, memId);
-    rs = pstmt.executeQuery();
-
-    while(rs.next()){
+    if (orderList == null || orderList.size() == 0) {
+%>
+<tr>
+    <td colspan="12" style="text-align:center;">주문내역이 없습니다.</td>
+</tr>
+<%
+    } else {
+        for (OrderDetailDTO order : orderList) {
+            String orderStatus = order.getOrderStatus();
 %>
 
 <tr>
-    <td><%=rs.getString("MEM_NAME") %></td>
-    <td><%=rs.getString("MEM_ID") %></td>
-    <td><%=rs.getString("PRO_NAME") %></td>
-    <td><%=rs.getString("PRO_COLOR") %></td>
-    <td><%=rs.getString("PRO_SIZE") %></td>
-    <td><%=rs.getInt("QUANTITY") %></td>
-    <td><%=rs.getInt("PRO_PRICE") %></td>
-    <td><%=rs.getInt("SUM_PRICE") %></td>
-    <td class="delivery-info">
-        <%=rs.getString("RECEIVER_ADDR") %>
-    </td>
-    <td>
-        <%=rs.getString("RECEIVER_PHONE") %>
-    </td>
-    <%
-        String orderStatus = rs.getString("ORDER_STATUS");
-         if (orderStatus != null) {
-        orderStatus = orderStatus.trim();
-    }
-       /* String statusClass = "취소요청".equals(orderStatus) ? "cancel-request" : "";*/
-    %>
+    <td><%=order.getMemName() %></td>
+    <td><%=order.getMemId() %></td>
+    <td><%=order.getProName() %></td>
+    <td><%=order.getProColor() %></td>
+    <td><%=order.getProSize() %></td>
+    <td><%=order.getQuantity() %></td>
+    <td><%=order.getProPrice() %></td>
+    <td><%=order.getSumPrice() %></td>
+    <td class="delivery-info"><%=order.getReceiverAddr() %></td>
+    <td><%=order.getReceiverPhone() %></td>
     <td style="<%="취소요청".equals(orderStatus) ? "color:red; font-weight:900;" : "" %>">
         <%=orderStatus %>
     </td>
-    <td>
-        <%=rs.getDate("ORDER_DATE") %>
-    </td>
+    <td><%=order.getOrderDate() %></td>
 </tr>
 
 <%
+        }
     }
 
-} catch(Exception e){
-    out.println("<tr><td colspan='12'>주문내역 조회 오류: " + e.getMessage() + "</td></tr>");
-} finally {
-    if(rs != null) rs.close();
-    if(pstmt != null) pstmt.close();
-    if(conn != null) conn.close();
-}
+    if (conn != null) 
+        conn.close();
 %>
 
 </table>

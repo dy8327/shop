@@ -11,6 +11,12 @@ public class OrderDetailDTO {
     private String proName;
     private String proColor;
     private String proSize;
+    private String memId;
+    private String memName;
+    private String receiverAddr;
+    private String receiverPhone;
+    private String orderStatus;
+    private String orderDate;
     public int getDetailId() {
         return detailId;
     }
@@ -70,6 +76,42 @@ public class OrderDetailDTO {
     }
     public void setProSize(String proSize) {
         this.proSize = proSize;
+    }
+    public String getMemId() {
+        return memId;
+    }
+    public void setMemId(String memId) {
+        this.memId = memId;
+    }
+    public String getMemName() {
+        return memName;
+    }
+    public void setMemName(String memName) {
+        this.memName = memName;
+    }
+    public String getReceiverAddr() {
+        return receiverAddr;
+    }
+    public void setReceiverAddr(String receiverAddr) {
+        this.receiverAddr = receiverAddr;
+    }
+    public String getReceiverPhone() {
+        return receiverPhone;
+    }
+    public void setReceiverPhone(String receiverPhone) {
+        this.receiverPhone = receiverPhone;
+    }
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+    public String getOrderDate() {
+        return orderDate;
+    }
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
     }
     
 }
