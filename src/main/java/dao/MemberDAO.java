@@ -2,6 +2,8 @@ package dao;
 
 import dto.Member;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberDAO {
     //로그인
@@ -78,4 +80,39 @@ public String getCustomerKey(String memId) throws SQLException {
     return customerKey;
 }
 
+ // 관리자 - 전체 회원 목록 조회
+    public List<Member> getAllMembers() throws Exception {
+        List<Member> memberList = new ArrayList<>();
+
+        String sql = 
+            "SELECT MEM_ID, MEM_NAME, MEM_GRADE, MEM_PHONE " +
+            "FROM MEMBERS " +
+            "ORDER BY MEM_ID DESC";
+
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Member member = new Member();
+
+                member.setMemId(rs.getString("MEM_ID"));
+                member.setMemName(rs.getString("MEM_NAME"));
+                member.setMemGrade(rs.getString("MEM_GRADE"));
+                member.setMemPhone(rs.getString("MEM_PHONE"));
+
+                memberList.add(member);
+            }
+
+        } finally {
+            if (rs != null) 
+                rs.close();
+            if (pstmt != null) 
+                pstmt.close();
+        }
+        return memberList;
+    }
 }

@@ -1,6 +1,19 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="dao.MemberDAO" %>
+<%@ page import="dto.Member" %>
 <%@ include file="../dbconn.jsp" %>
+
+<%
+    List<Member> memberList = new ArrayList<>();
+
+    try {
+        MemberDAO memberDAO = new MemberDAO(conn);
+        memberList = memberDAO.getAllMembers();
+    } catch(Exception e) {
+        out.println("<script>alert('회원 목록 조회 오류: " + e.getMessage() + "');</script>");
+    }
+%>
 
 <!DOCTYPE html>
 <html>
@@ -27,36 +40,31 @@
         </tr>
 
         <%
-            PreparedStatement pstmt = null;
-            ResultSet rs = null;
-
-            try{
-                String sql = "SELECT MEM_ID, MEM_NAME, MEM_GRADE, MEM_PHONE FROM MEMBERS ORDER BY MEM_ID DESC";
-                pstmt = conn.prepareStatement(sql);
-                rs = pstmt.executeQuery();
-
-                while(rs.next()){
+            if (memberList == null || memberList.size() == 0) {
         %>
         <tr>
-            <td><%=rs.getString("MEM_ID") %></td>
-            <td><%=rs.getString("MEM_NAME") %></td>
-            <td><%=rs.getString("MEM_GRADE") %></td>
-            <td><%=rs.getString("MEM_PHONE") %></td>
+            <td colspan="5" style="text-align:center;">회원 목록이 없습니다.</td>
+        </tr>
+        <%
+            } else {
+                for (Member member : memberList) {
+        %>
+        <tr>
+            <td><%=member.getMemId() %></td>
+            <td><%=member.getMemName() %></td>
+            <td><%=member.getMemGrade() %></td>
+            <td><%=member.getMemPhone() %></td>
             <td>
-                <a href="adminOrderList.jsp?id=<%= rs.getString("MEM_ID") %>" class="admin-btn">
+                <a href="adminOrderList.jsp?id=<%=member.getMemId() %>" class="admin-btn">
                     주문내역
                 </a>
             </td>
         </tr>
         <%
                 }
-            } catch(Exception e){
-                out.println("<tr><td colspan='5'>회원 목록 조회 오류: "+ e.getMessage() +"</td></tr>");
-            } finally {
-                if(rs != null) rs.close();
-                if(pstmt != null) pstmt.close();
-                if(conn != null) conn.close();
             }
+
+            if (conn != null) conn.close();
         %>
     </table>
 </div>
