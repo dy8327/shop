@@ -108,7 +108,8 @@ if (cartList == null || cartList.size() == 0) {
 <%@ include file="../footer.jsp" %>
 
 <%
-if (conn != null) try { conn.close(); } catch(Exception e) {}
+if (conn != null)
+    conn.close();
 %>
 
 </body>

@@ -53,6 +53,7 @@
     } catch (Exception e) {
         out.println("장바구니 등록 오류: " + e.getMessage());
     } finally {
-        if (conn != null) try { conn.close(); } catch(Exception e) {}
+        if (conn != null) 
+            conn.close();
     }
 %>

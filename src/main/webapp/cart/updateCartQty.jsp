@@ -57,6 +57,7 @@
     } catch (Exception e) {
         out.println("수량 변경 오류: " + e.getMessage());
     } finally {
-        if (conn != null) try { conn.close(); } catch(Exception e) {}
+        if (conn != null) 
+            conn.close(); 
     }
 %>
