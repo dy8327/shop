@@ -111,7 +111,7 @@
                 <h2>배송 정보</h2>
 
                 <input type="text" name="receiverName" placeholder="받는 사람" required>
-                <input type="text" name="receiverPhone" placeholder="연락처" required>
+                <input type="text" name="receiverPhone" placeholder="연락처(숫자만 입력하세요)" required>
 
                 <div class="address-row">
                     <input type="text"
@@ -147,17 +147,6 @@
         <div>
 
             <section class="panel">
-                <h2>결제 수단</h2>
-
-                <input type="hidden" name="payment" value="CARD">
-
-                <p>카드 결제</p>
-                <p style="font-size:13px; color:#777;">
-                    다음 단계에서 토스페이먼츠 테스트 결제위젯으로 이동합니다.
-                </p>
-            </section>
-
-            <section class="panel">
                 <h2>결제 금액</h2>
 
                 <p>상품 금액: <%= totalPrice %>원</p>
@@ -166,7 +155,7 @@
 
                 <input type="hidden" name="totalPrice" value="<%= finalPrice %>">
 
-                <button type="submit" class="button" style="margin-top: 30px">
+                <button type="submit" class="btn wide" style="margin-top: 30px">
                     결제하기
                 </button>
 

@@ -93,7 +93,7 @@ try {
 
         <hr>
 
-        <button type="button" class="button" style="margin-top: 30px;" onclick="requestPayment()">
+        <button type="button" class="btn wide" style="margin-top: 30px;" onclick="requestPayment()">
             결제하기
         </button>
 
