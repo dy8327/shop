@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import dto.Shop;
 
@@ -238,6 +239,55 @@ public ArrayList<Shop> getAllProducts(Connection conn) throws Exception {
     } finally {
         if (rs != null) rs.close();
         if (pstmt != null) pstmt.close();
+    }
+
+    return productList;
+}
+
+// 관리자 상품 편집 목록 조회
+public List<Shop> getProductEditList(Connection conn) throws Exception {
+
+    List<Shop> productList = new ArrayList<Shop>();
+
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        String sql =
+            "SELECT P.PRO_ID, P.PRO_NAME, P.PRO_PRICE, P.PRO_CONTENT, " +
+            "P.PRO_IMG, P.PRO_CATEGORY, P.PRO_DATE, " +
+            "O.OPTION_ID, O.PRO_SIZE, O.PRO_COLOR, O.PRO_STOCK " +
+            "FROM PRODUCTS P " +
+            "LEFT JOIN PRO_OPTION O ON P.PRO_ID = O.PRO_ID " +
+            "ORDER BY P.PRO_ID DESC";
+
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            Shop shop = new Shop();
+
+            shop.setProId(rs.getInt("PRO_ID"));
+            shop.setProName(rs.getString("PRO_NAME"));
+            shop.setProPrice(rs.getInt("PRO_PRICE"));
+            shop.setProCont(rs.getString("PRO_CONTENT"));
+            shop.setProImg(rs.getString("PRO_IMG"));
+            shop.setProCategory(rs.getString("PRO_CATEGORY"));
+            shop.setProDate(rs.getString("PRO_DATE"));
+
+            shop.setProOpId(rs.getInt("OPTION_ID"));
+            shop.setProSize(rs.getString("PRO_SIZE"));
+            shop.setProColor(rs.getString("PRO_COLOR"));
+            shop.setProStock(rs.getInt("PRO_STOCK"));
+
+            productList.add(shop);
+        }
+
+    } finally {
+        if (rs != null)
+            rs.close();
+        if (pstmt != null)
+            pstmt.close();
     }
 
     return productList;

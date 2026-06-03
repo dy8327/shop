@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.*" %>
-<%@ page import="dao.ProductDAO" %>
+<%@ page import="dao.ShopDAO" %>
 <%@ page import="dto.Shop" %>
 <%@ include file="../dbconn.jsp" %>
 
@@ -10,8 +10,8 @@
     List<Shop> productList = new ArrayList<>();
 
     try {
-        ProductDAO productDAO = new ProductDAO(conn);
-        productList = productDAO.getProductDetail();
+        ShopDAO shopDAO = new ShopDAO(conn);
+        productList = shopDAO.getProductEditList();
     } catch(Exception e) {
         out.println("<script>alert('상품 편집 목록 오류: " + e.getMessage() + "');</script>");
     }

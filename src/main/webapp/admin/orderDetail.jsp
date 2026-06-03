@@ -132,7 +132,7 @@
 
             <tr>
                 <th>주소</th>
-                <td colspan="3"><%=order.getReceiverAdde() %></td>
+                <td colspan="3"><%=order.getReceiverAddr() %></td>
             </tr>
 
             <tr>
@@ -291,17 +291,3 @@ function checkDeliveryInfo(form) {
 
 </body>
 </html>
-
-<%
-    } catch (Exception e) {
-%>
-        <script>
-            alert("주문 상세 조회 오류: <%=e.getMessage() %>");
-            location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
-        </script>
-<%
-    } finally {
-       if (conn!=null)
-        conn.close();
-    }
-%>
