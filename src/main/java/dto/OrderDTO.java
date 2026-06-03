@@ -20,6 +20,11 @@ public class OrderDTO {
     private String tossOrderId;
     private String paymentKey;
     private int paidAmount;
+
+    private String orderDate;
+    private String deliveryCompany;
+    private String trackingNumber;
+    private String memName;
     public int getOrderId() {
         return orderId;
     }
@@ -110,4 +115,29 @@ public class OrderDTO {
     public void setPaidAmount(int paidAmount) {
         this.paidAmount = paidAmount;
     }
+    public String getOrderDate() {
+        return orderDate;
+    }
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+    public String getDeliveryCompany() {
+        return deliveryCompany;
+    }
+    public void setDeliveryCompany(String deliveryCompany) {
+        this.deliveryCompany = deliveryCompany;
+    }
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+    public String getMemName() {
+        return memName;
+    }
+    public void setMemName(String memName) {
+        this.memName = memName;
+    }
+    
 }

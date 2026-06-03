@@ -1,5 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="dao.OrderDAO" %>
+<%@ page import="dto.OrderDTO" %>
+<%@ page import="dto.OrderDetailDTO" %>
 <%@ include file="../dbconn.jsp" %>
 
 <%
@@ -32,31 +35,16 @@
 
     int orderId = Integer.parseInt(orderIdStr);
 
-    PreparedStatement orderPstmt = null;
-    PreparedStatement detailPstmt = null;
-    ResultSet orderRs = null;
-    ResultSet detailRs = null;
-
-    String orderSql =
-        "SELECT " +
-        "o.ORDER_ID, o.MEM_ID, o.RECEIVER_NAME, o.RECEIVER_PHONE, o.RECEIVER_ADDR, o.DELIVERY_MEMO, " +
-        "o.PAYMENT, o.TOTAL_PRICE, o.ORDER_STATUS, o.ORDER_DATE, o.DELIVERY_COMPANY, o.TRACKING_NUMBER, m.MEM_NAME " +
-        "FROM ORDERS o " +
-        "JOIN MEMBERS m ON o.MEM_ID = m.MEM_ID " +
-        "WHERE o.ORDER_ID = ?";
-
-    String detailSql =
-        "SELECT " +
-        "PRO_NAME, PRO_SIZE, PRO_COLOR, QUANTITY, PRO_PRICE " +
-        "FROM ORDER_DETAIL " +
-        "WHERE ORDER_ID = ?";
+    OrderDTO order = null;
+    List<OrderDetailDTO> detailList = new ArrayList<>();
 
     try {
-        orderPstmt = conn.prepareStatement(orderSql);
-        orderPstmt.setInt(1, orderId);
-        orderRs = orderPstmt.executeQuery();
+        OrderDAO orderDAO = new OrderDAO(conn);
 
-        if (!orderRs.next()) {
+        order = orderDAO.getOrderById(orderId);
+        detailList = orderDAO.getOrderDetailsByOrderId(orderId);
+
+        if (order == null) {
 %>
             <script>
                 alert("주문 정보를 찾을 수 없습니다.");
@@ -65,6 +53,16 @@
 <%
             return;
         }
+
+    } catch (Exception e) {
+%>
+        <script>
+            alert("주문 상세 조회 오류: <%=e.getMessage() %>");
+            location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
+        </script>
+<%
+        return;
+    }
 %>
 
 <!DOCTYPE html>
@@ -90,30 +88,30 @@
         <table class="admin-product-table">
             <tr>
                 <th>주문번호</th>
-                <td><%=orderRs.getInt("ORDER_ID") %></td>
+                <td><%=order.getOrderId() %></td>
                 <th>주문일</th>
-                <td><%=orderRs.getDate("ORDER_DATE") %></td>
+                <td><%=order.getOrderDate() %></td>
             </tr>
 
             <tr>
                 <th>회원명</th>
-                <td><%=orderRs.getString("MEM_NAME") %></td>
+                <td><%=order.getMemName() %></td>
                 <th>회원ID</th>
-                <td><%=orderRs.getString("MEM_ID") %></td>
+                <td><%=order.getMemId() %></td>
             </tr>
 
             <tr>
                 <th>결제수단</th>
-                <td><%=orderRs.getString("PAYMENT") %></td>
+                <td><%=order.getPayment() %></td>
                 <th>합계금액</th>
-                <td><%=String.format("%,d", orderRs.getInt("TOTAL_PRICE")) %>원</td>
+                <td><%=String.format("%,d", order.getTotalPrice()) %>원</td>
             </tr>
 
             <tr>
                 <th>현재상태</th>
                 <td colspan="3">
                     <span class="order-status">
-                        <%=orderRs.getString("ORDER_STATUS") %>
+                        <%=order.getOrderStatus() %>
                     </span>
                 </td>
             </tr>
@@ -127,28 +125,28 @@
         <table class="admin-product-table">
             <tr>
                 <th>수령인</th>
-                <td><%=orderRs.getString("RECEIVER_NAME") %></td>
+                <td><%=order.getReceiverName() %></td>
                 <th>연락처</th>
-                <td><%=orderRs.getString("RECEIVER_PHONE") %></td>
+                <td><%=order.getReceiverPhone()%></td>
             </tr>
 
             <tr>
                 <th>주소</th>
-                <td colspan="3"><%=orderRs.getString("RECEIVER_ADDR") %></td>
+                <td colspan="3"><%=order.getReceiverAdde() %></td>
             </tr>
 
             <tr>
                 <th>배송메모</th>
                 <td colspan="3">
-                    <%=orderRs.getString("DELIVERY_MEMO") == null ? "" : orderRs.getString("DELIVERY_MEMO") %>
+                    <%=order.getDeliveryMemo() == null ? "" : order.getDeliveryMemo() %>
                 </td>
             </tr>
 
             <tr>
                 <th>택배사</th>
-                <td><%=orderRs.getString("DELIVERY_COMPANY") == null ? "" : orderRs.getString("DELIVERY_COMPANY") %></td>
+                <td><%=order.getDeliveryCompany() == null ? "" : order.getDeliveryCompany() %></td>
                 <th>송장번호</th>
-                <td><%=orderRs.getString("TRACKING_NUMBER") == null ? "" : orderRs.getString("TRACKING_NUMBER") %></td>
+                <td><%=order.getTrackingNumber() == null ? "" : order.getTrackingNumber() %></td>
             </tr>
         </table>
     </section>
@@ -171,26 +169,19 @@
 
             <tbody>
             <%
-                detailPstmt = conn.prepareStatement(detailSql);
-                detailPstmt.setInt(1, orderId);
-                detailRs = detailPstmt.executeQuery();
-
-                while (detailRs.next()) {
-                    int qty = detailRs.getInt("QUANTITY");
-                    int price = detailRs.getInt("PRO_PRICE");
-                    int subtotal = qty * price;
-            %>
-                <tr>
-                    <td><%=detailRs.getString("PRO_NAME") %></td>
-                    <td><%=detailRs.getString("PRO_SIZE") %></td>
-                    <td><%=detailRs.getString("PRO_COLOR") %></td>
-                    <td><%=qty %>개</td>
-                    <td><%=String.format("%,d", price) %>원</td>
-                    <td><%=String.format("%,d", subtotal) %>원</td>
-                </tr>
-            <%
-                }
-            %>
+            for (OrderDetailDTO detail : detailList) {
+        %>
+            <tr>
+                <td><%=detail.getProName() %></td>
+                <td><%=detail.getProSize() %></td>
+                <td><%=detail.getProColor() %></td>
+                <td><%=detail.getQuantity() %>개</td>
+                <td><%=String.format("%,d", detail.getProPrice()) %>원</td>
+                <td><%=String.format("%,d", detail.getSumPrice()) %>원</td>
+            </tr>
+        <%
+            }
+        %>
             </tbody>
         </table>
     </section>
@@ -204,33 +195,33 @@
               class="admin-form"
               onsubmit="return checkDeliveryInfo(this);">
 
-            <input type="hidden" name="orderId" value="<%=orderRs.getInt("ORDER_ID") %>">
+            <input type="hidden" name="orderId" value="<%=order.getOrderId() %>">
 
             <div class="form-row">
                 <label>주문 상태</label>
                 <select name="orderStatus">
                     <option value="주문완료"
-                        <%="주문완료".equals(orderRs.getString("ORDER_STATUS")) ? "selected" : "" %>>
+                        <%="주문완료".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         주문완료
                     </option>
 
                     <option value="배송준비"
-                        <%="배송준비".equals(orderRs.getString("ORDER_STATUS")) ? "selected" : "" %>>
+                        <%="배송준비".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         배송준비
                     </option>
 
                     <option value="배송중"
-                        <%="배송중".equals(orderRs.getString("ORDER_STATUS")) ? "selected" : "" %>>
+                        <%="배송중".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         배송중
                     </option>
 
                     <option value="배송완료"
-                        <%="배송완료".equals(orderRs.getString("ORDER_STATUS")) ? "selected" : "" %>>
+                        <%="배송완료".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         배송완료
                     </option>
 
                     <option value="주문취소"
-                        <%="주문취소".equals(orderRs.getString("ORDER_STATUS")) ? "selected" : "" %>>
+                        <%="주문취소".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         주문취소
                     </option>
                 </select>
@@ -242,12 +233,12 @@
                     <option value="">택배사 선택</option>
 
                     <option value="CJ대한통운"
-                        <%="CJ대한통운".equals(orderRs.getString("DELIVERY_COMPANY")) ? "selected" : "" %>>
+                        <%="CJ대한통운".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
                         CJ대한통운
                     </option>
 
                     <option value="우체국택배"
-                        <%="우체국택배".equals(orderRs.getString("DELIVERY_COMPANY")) ? "selected" : "" %>>
+                        <%="우체국택배".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
                         우체국택배
                     </option>
                 </select>
@@ -257,7 +248,7 @@
                 <label>송장번호</label>
                 <input type="text"
                        name="trackingNumber"
-                       value="<%=orderRs.getString("TRACKING_NUMBER") == null ? "" : orderRs.getString("TRACKING_NUMBER") %>"
+                       value="<%=order.getTrackingNumber() == null ? "" : order.getTrackingNumber() %>"
                        placeholder="송장번호를 입력하세요">
             </div>
 
@@ -310,13 +301,7 @@ function checkDeliveryInfo(form) {
         </script>
 <%
     } finally {
-        if (detailRs != null) 
-            detailRs.close();
-        if (detailPstmt != null)
-            detailPstmt.close();
-        if (orderRs != null) 
-            orderRs.close();
-        if (orderPstmt != null)
-            orderPstmt.close();
+       if (conn!=null)
+        conn.close();
     }
 %>

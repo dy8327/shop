@@ -386,4 +386,101 @@ public class OrderDAO {
 
         return orderList;
     }
+     // 관리자 - 주문 기본 정보 조회
+    public OrderDTO getOrderById(int orderId) throws Exception {
+        OrderDTO order = null;
+
+        String sql =
+            "SELECT " +
+            "o.ORDER_ID, o.MEM_ID, o.RECEIVER_NAME, o.RECEIVER_PHONE, o.RECEIVER_ADDR, o.DELIVERY_MEMO, " +
+            "o.PAYMENT, o.TOTAL_PRICE, o.ORDER_STATUS, " +
+            "TO_CHAR(o.ORDER_DATE, 'YYYY-MM-DD') AS ORDER_DATE, " +
+            "o.DELIVERY_COMPANY, o.TRACKING_NUMBER, m.MEM_NAME " +
+            "FROM ORDERS o " +
+            "JOIN MEMBERS m ON o.MEM_ID = m.MEM_ID " +
+            "WHERE o.ORDER_ID = ?";
+
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, orderId);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                order = new OrderDTO();
+
+                order.setOrderId(rs.getInt("ORDER_ID"));
+                order.setMemId(rs.getString("MEM_ID"));
+                order.setMemName(rs.getString("MEM_NAME"));
+
+                order.setReceiverName(rs.getString("RECEIVER_NAME"));
+                order.setReceiverPhone(rs.getString("RECEIVER_PHONE"));
+                order.setReceiverAddr(rs.getString("RECEIVER_ADDR"));
+                order.setDeliveryMemo(rs.getString("DELIVERY_MEMO"));
+
+                order.setPayment(rs.getString("PAYMENT"));
+                order.setTotalPrice(rs.getInt("TOTAL_PRICE"));
+
+                String orderStatus = rs.getString("ORDER_STATUS");
+                if (orderStatus != null) {
+                    orderStatus = orderStatus.trim();
+                }
+
+                order.setOrderStatus(orderStatus);
+                order.setOrderDate(rs.getString("ORDER_DATE"));
+                order.setDeliveryCompany(rs.getString("DELIVERY_COMPANY"));
+                order.setTrackingNumber(rs.getString("TRACKING_NUMBER"));
+            }
+
+        } finally {
+            if (rs != null) 
+                rs.close();
+            if (pstmt != null) 
+                pstmt.close();
+        }
+
+        return order;
+    }
+
+    // 관리자 - 주문 상세 상품 목록 조회
+    public List<OrderDetailDTO> getOrderDetailsByOrderId(int orderId) throws Exception {
+        List<OrderDetailDTO> detailList = new ArrayList<>();
+
+        String sql =
+            "SELECT PRO_NAME, PRO_SIZE, PRO_COLOR, QUANTITY, PRO_PRICE " +
+            "FROM ORDER_DETAIL " +
+            "WHERE ORDER_ID = ?";
+
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, orderId);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                OrderDetailDTO detail = new OrderDetailDTO();
+
+                detail.setProName(rs.getString("PRO_NAME"));
+                detail.setProSize(rs.getString("PRO_SIZE"));
+                detail.setProColor(rs.getString("PRO_COLOR"));
+                detail.setQuantity(rs.getInt("QUANTITY"));
+                detail.setProPrice(rs.getInt("PRO_PRICE"));
+                detail.setSumPrice(rs.getInt("QUANTITY") * rs.getInt("PRO_PRICE"));
+
+                detailList.add(detail);
+            }
+
+        } finally {
+            if (rs != null) 
+                rs.close();
+            if (pstmt != null) 
+                pstmt.close();
+        }
+
+        return detailList;
+    }
 }
