@@ -10,8 +10,8 @@
     List<Shop> productList = new ArrayList<>();
 
     try {
-        ShopDAO shopDAO = new ShopDAO(conn);
-        productList = shopDAO.getProductEditList();
+    ShopDAO shopDAO = new ShopDAO();
+    productList = shopDAO.getProductEditList(conn);
     } catch(Exception e) {
         out.println("<script>alert('상품 편집 목록 오류: " + e.getMessage() + "');</script>");
     }
