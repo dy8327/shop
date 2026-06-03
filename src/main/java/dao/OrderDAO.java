@@ -309,4 +309,20 @@ public class OrderDAO {
             pstmt.executeUpdate();
         }
     }
+    //결제 실패 시 상태 업데이트
+    public void updatePaymentFail(String tossOrderId, String memId) throws SQLException {
+    String sql =
+        "UPDATE ORDERS " +
+        "SET ORDER_STATUS = '결제실패', " +
+        "PAYMENT_STATUS = 'FAILED' " +
+        "WHERE ORDER_ID_TOSS = ? " +
+        "AND MEM_ID = ? " +
+        "AND PAYMENT_STATUS = 'READY'";
+
+    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, tossOrderId);
+        pstmt.setString(2, memId);
+        pstmt.executeUpdate();
+    }
+}
 }
