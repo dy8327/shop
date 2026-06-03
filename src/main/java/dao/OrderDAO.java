@@ -244,7 +244,7 @@ public class OrderDAO {
         String sql =
             "SELECT COUNT(*) AS CNT " +
             "FROM ORDER_DETAIL D " +
-            "JOIN PRO_OPTION O ON D.OPTION_ID = O.OPTION_ID " +
+            "JOIN PRO_OPTION O ON D.PRO_OP_ID = O.OPTION_ID " +
             "WHERE D.ORDER_ID = ? " +
             "AND O.PRO_STOCK < D.QUANTITY";
     
@@ -260,7 +260,7 @@ public class OrderDAO {
     
         return false;
     }
-
+    //실제 매칭되는 옵션만 업데이트
     public void decreaseStockByOrderId(int orderId) throws SQLException {
         String sql =
             "UPDATE PRO_OPTION O " +
@@ -268,13 +268,14 @@ public class OrderDAO {
             "    SELECT D.QUANTITY " +
             "    FROM ORDER_DETAIL D " +
             "    WHERE D.ORDER_ID = ? " +
-            "    AND D.OPTION_ID = O.OPTION_ID " +
+            "    AND D.PRO_OP_ID = O.OPTION_ID " +
             ") " +
-            "WHERE O.OPTION_ID IN ( " +
-            "    SELECT OPTION_ID " +
-            "    FROM ORDER_DETAIL " +
-            "    WHERE ORDER_ID = ? " +
-            ")";
+            "WHERE EXISTS ( " + 
+        "    SELECT 1 " +
+        "    FROM ORDER_DETAIL D " +
+        "    WHERE D.ORDER_ID = ? " +
+        "    AND D.PRO_OP_ID = O.OPTION_ID " +
+        ")";
     
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, orderId);
