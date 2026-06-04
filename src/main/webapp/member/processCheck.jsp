@@ -1,49 +1,27 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
 <%@ include file="../dbconn.jsp" %>
+<%@ page import="service.MemberService" %>
 
 <%
     request.setCharacterEncoding("UTF-8");
 
     String memId = request.getParameter("memId");
-
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
-
     boolean isDuplicate = false;
+    String errorMessage = null;
+
+    MemberService memberService = new MemberService();
 
     try {
-        if (memId == null || memId.trim().equals("")) {
-%>
-            <script>
-                alert("아이디를 입력하세요.");
-                window.close();
-            </script>
-<%
-            return;
-        }
-
+        isDuplicate = memberService.isDuplicateId(conn, memId);
         memId = memId.trim();
 
-        String sql = "SELECT COUNT(*) FROM MEMBERS WHERE MEM_ID = ?";
-        pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, memId);
-
-        rs = pstmt.executeQuery();
-
-        if (rs.next()) {
-            int count = rs.getInt(1);
-
-            if (count > 0) {
-                isDuplicate = true;
-            }
-        }
+    } catch (IllegalArgumentException e) {
+        errorMessage = e.getMessage();
 
     } catch (Exception e) {
-        out.println("아이디 중복확인 오류: " + e.getMessage());
+        errorMessage = "아이디 중복확인 오류가 발생했습니다.";
+
     } finally {
-        if (rs != null) rs.close();
-        if (pstmt != null) pstmt.close();
         if (conn != null) conn.close();
     }
 %>
@@ -57,7 +35,12 @@
 <body>
 
 <%
-    if (isDuplicate) {
+    if (errorMessage != null) {
+%>
+        <h3><%= errorMessage %></h3>
+        <button type="button" onclick="window.close();">닫기</button>
+<%
+    } else if (isDuplicate) {
 %>
         <h3>이미 사용 중인 아이디입니다.</h3>
         <p>다른 아이디를 입력해주세요.</p>

@@ -483,4 +483,113 @@ public class OrderDAO {
 
         return detailList;
     }
+    // 관리자 - 회원 주문내역 조회
+    public List<OrderDTO> getAdminOrderList() throws Exception {
+        List<OrderDTO> orderList = new ArrayList<>();
+    
+        String sql =
+            "SELECT " +
+            "o.ORDER_ID, m.MEM_NAME, o.MEM_ID, " +
+            "MIN(d.PRO_NAME) AS PRO_NAME, " +
+            "COUNT(d.PRO_ID) AS PRODUCT_COUNT, " +
+            "o.TOTAL_PRICE, o.ORDER_STATUS, o.ORDER_DATE " +
+            "FROM ORDERS o " +
+            "JOIN MEMBERS m ON o.MEM_ID = m.MEM_ID " +
+            "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
+            "GROUP BY o.ORDER_ID, m.MEM_NAME, o.MEM_ID, o.TOTAL_PRICE, o.ORDER_STATUS, o.ORDER_DATE " +
+            "ORDER BY o.ORDER_ID DESC";
+    
+        try (
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()
+        ) {
+            while (rs.next()) {
+                OrderDTO order = new OrderDTO();
+    
+                order.setOrderId(rs.getInt("ORDER_ID"));
+                order.setMemName(rs.getString("MEM_NAME"));
+                order.setMemId(rs.getString("MEM_ID"));
+                order.setProName(rs.getString("PRO_NAME"));
+                order.setProductCount(rs.getInt("PRODUCT_COUNT"));
+                order.setTotalPrice(rs.getInt("TOTAL_PRICE"));
+                order.setOrderStatus(rs.getString("ORDER_STATUS"));
+                order.setOrderDate(rs.getString("ORDER_DATE"));
+    
+                orderList.add(order);
+            }
+        }
+    
+        return orderList;
+    }
+
+    //주문 내역 업데이트
+    public String getOrderStatus(int orderId) throws Exception {
+        String sql =
+            "SELECT TRIM(ORDER_STATUS) AS ORDER_STATUS " +
+            "FROM ORDERS " +
+            "WHERE ORDER_ID = ?";
+    
+        try (
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            pstmt.setInt(1, orderId);
+    
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("ORDER_STATUS");
+                }
+            }
+        }
+    
+        return null;
+    }
+    //주문 취소 시 재고 롤백
+    public void restoreStockByOrderId(int orderId) throws Exception {
+        String detailSql =
+            "SELECT PRO_OP_ID, QUANTITY " +
+            "FROM ORDER_DETAIL " +
+            "WHERE ORDER_ID = ?";
+    
+        String stockSql =
+            "UPDATE PRO_OPTION " +
+            "SET PRO_STOCK = PRO_STOCK + ? " +
+            "WHERE OPTION_ID = ?";
+    
+        try (
+            PreparedStatement detailPstmt = conn.prepareStatement(detailSql);
+            PreparedStatement stockPstmt = conn.prepareStatement(stockSql)
+        ) {
+            detailPstmt.setInt(1, orderId);
+    
+            try (ResultSet rs = detailPstmt.executeQuery()) {
+                while (rs.next()) {
+                    int optionId = rs.getInt("PRO_OP_ID");
+                    int quantity = rs.getInt("QUANTITY");
+    
+                    stockPstmt.setInt(1, quantity);
+                    stockPstmt.setInt(2, optionId);
+                    stockPstmt.executeUpdate();
+                }
+            }
+        }
+    }
+
+    //주문상태 업데이트(배송)
+    public int updateOrderStatus(int orderId, String orderStatus, String deliveryCompany, String trackingNumber) throws Exception {
+        String sql =
+            "UPDATE ORDERS " +
+            "SET ORDER_STATUS = ?, DELIVERY_COMPANY = ?, TRACKING_NUMBER = ? " +
+            "WHERE ORDER_ID = ?";
+    
+        try (
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            pstmt.setString(1, orderStatus);
+            pstmt.setString(2, deliveryCompany);
+            pstmt.setString(3, trackingNumber);
+            pstmt.setInt(4, orderId);
+    
+            return pstmt.executeUpdate();
+        }
+    }
 }

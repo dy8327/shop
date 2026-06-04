@@ -30,10 +30,16 @@
             location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
         </script>
 <%
+<<<<<<< HEAD
         return;
     }
 
     int orderId = 0;
+=======
+    return;
+}
+int orderId = 0;
+>>>>>>> 313a230f07e4941e4abe8124af448037e82aeb67
 
     try {
         orderId = Integer.parseInt(orderIdStr);
@@ -44,8 +50,13 @@
             location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
         </script>
 <%
+<<<<<<< HEAD
         return;
     }
+=======
+    return;
+}
+>>>>>>> 313a230f07e4941e4abe8124af448037e82aeb67
 
     OrderDTO order = null;
     List<OrderDetailDTO> detailList = new ArrayList<>();
@@ -299,7 +310,11 @@ function checkDeliveryInfo(form) {
     return confirm("주문 상태를 변경하시겠습니까?");
 }
 </script>
-
+<%
+    if (conn != null) {
+        try { conn.close(); } catch(Exception e) {}
+    }
+%>
 <%@ include file="../footer.jsp" %>
 
 </body>
