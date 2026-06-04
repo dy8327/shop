@@ -81,7 +81,7 @@
     <td><%= order.getOrderDate() %></td>
     <td>
         <a class="admin-btn small"
-           href="<%= request.getContextPath() %>/admin/orderDetail.jsp?orderId=<%= order.getOrderId() %>">
+           href="<%= request.getContextPath() %>/admin/orderDetail.jsp?orderId=<%=order.getOrderId() %>">
             상세
         </a>
     </td>

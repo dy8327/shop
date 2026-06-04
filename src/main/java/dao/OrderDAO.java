@@ -521,4 +521,75 @@ public class OrderDAO {
     
         return orderList;
     }
+
+    //주문 내역 업데이트
+    public String getOrderStatus(int orderId) throws Exception {
+        String sql =
+            "SELECT TRIM(ORDER_STATUS) AS ORDER_STATUS " +
+            "FROM ORDERS " +
+            "WHERE ORDER_ID = ?";
+    
+        try (
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            pstmt.setInt(1, orderId);
+    
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("ORDER_STATUS");
+                }
+            }
+        }
+    
+        return null;
+    }
+    //주문 취소 시 재고 롤백
+    public void restoreStockByOrderId(int orderId) throws Exception {
+        String detailSql =
+            "SELECT PRO_OP_ID, QUANTITY " +
+            "FROM ORDER_DETAIL " +
+            "WHERE ORDER_ID = ?";
+    
+        String stockSql =
+            "UPDATE PRO_OPTION " +
+            "SET PRO_STOCK = PRO_STOCK + ? " +
+            "WHERE OPTION_ID = ?";
+    
+        try (
+            PreparedStatement detailPstmt = conn.prepareStatement(detailSql);
+            PreparedStatement stockPstmt = conn.prepareStatement(stockSql)
+        ) {
+            detailPstmt.setInt(1, orderId);
+    
+            try (ResultSet rs = detailPstmt.executeQuery()) {
+                while (rs.next()) {
+                    int optionId = rs.getInt("PRO_OP_ID");
+                    int quantity = rs.getInt("QUANTITY");
+    
+                    stockPstmt.setInt(1, quantity);
+                    stockPstmt.setInt(2, optionId);
+                    stockPstmt.executeUpdate();
+                }
+            }
+        }
+    }
+
+    //주문상태 업데이트(배송)
+    public int updateOrderStatus(int orderId, String orderStatus, String deliveryCompany, String trackingNumber) throws Exception {
+        String sql =
+            "UPDATE ORDERS " +
+            "SET ORDER_STATUS = ?, DELIVERY_COMPANY = ?, TRACKING_NUMBER = ? " +
+            "WHERE ORDER_ID = ?";
+    
+        try (
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            pstmt.setString(1, orderStatus);
+            pstmt.setString(2, deliveryCompany);
+            pstmt.setString(3, trackingNumber);
+            pstmt.setInt(4, orderId);
+    
+            return pstmt.executeUpdate();
+        }
+    }
 }

@@ -32,7 +32,6 @@ if (orderIdStr == null || orderIdStr.trim().equals("")) {
 <%
     return;
 }
-
 int orderId = 0;
 
 try{
@@ -46,8 +45,6 @@ try{
 <%
     return;
 }
-
-    int orderId = Integer.parseInt(orderIdStr);
 
     OrderDTO order = null;
     List<OrderDetailDTO> detailList = new ArrayList<>();
@@ -300,7 +297,11 @@ function checkDeliveryInfo(form) {
     return confirm("주문 상태를 변경하시겠습니까?");
 }
 </script>
-
+<%
+    if (conn != null) {
+        try { conn.close(); } catch(Exception e) {}
+    }
+%>
 <%@ include file="../footer.jsp" %>
 
 </body>
