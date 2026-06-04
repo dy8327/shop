@@ -13,7 +13,7 @@
    String proPriceStr = request.getParameter("proPrice");
 
 if(proPriceStr == null || proPriceStr.trim().equals("")){
-    out.println("가격 값이 넘어오지 않았습니다. addProduct.jsp의 name='proPrice' 또는 form 범위를 확인하세요.");
+    out.println("가격 값이 넘어오지 않았습니다.");
     return;
 }
 

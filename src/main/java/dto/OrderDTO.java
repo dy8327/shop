@@ -20,11 +20,13 @@ public class OrderDTO {
     private String tossOrderId;
     private String paymentKey;
     private int paidAmount;
-
+    private String proName;
+    private int productCount;
     private String orderDate;
     private String deliveryCompany;
     private String trackingNumber;
     private String memName;
+    
     public int getOrderId() {
         return orderId;
     }
@@ -139,5 +141,25 @@ public class OrderDTO {
     public void setMemName(String memName) {
         this.memName = memName;
     }
+    public String getProName() {
+        return proName;
+    }
+    public void setProName(String proName) {
+        this.proName = proName;
+    }
+    public int getProductCount() {
+        return productCount;
+    }
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
+    }
+    public String getDisplayProductName() {
+        if (productCount > 1) {
+            return proName + " 외 " + (productCount - 1) + "개";
+        }
+        return proName;
+    }
+   
+   
     
 }

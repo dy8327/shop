@@ -1,7 +1,26 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="dto.OrderDTO" %>
+<%@ page import="java.util.*" %>
+<%@ page import="service.OrderService" %>
 <%@ include file="../dbconn.jsp" %>
 
+<%
+    request.setCharacterEncoding("UTF-8");
+
+    List<OrderDTO> orderList = new ArrayList<>();
+    String errorMessage = null;
+
+    try {
+        OrderService orderService = new OrderService();
+        orderList = orderService.getAdminOrderList(conn);
+
+    } catch (Exception e) {
+        errorMessage = "주문내역 조회 오류: " + e.getMessage();
+
+    } finally {
+        if (conn != null) conn.close();
+    }
+%>
 
 <!DOCTYPE html>
 <html>
@@ -30,80 +49,51 @@
     <th>회원ID</th>
     <th>상품명</th>
     <th>합계금액</th>
-    <th>상태</th>   
+    <th>상태</th>
     <th>주문일</th>
     <th>상세보기</th>
 </tr>
 
 <%
-PreparedStatement pstmt = null;
-ResultSet rs = null;
-
-try {
-
-String sql =
-    "SELECT " +
-    "o.ORDER_ID, m.MEM_NAME, o.MEM_ID, " +
-    "MIN(d.PRO_NAME) AS PRO_NAME, " +
-    "COUNT(d.PRO_ID) AS PRODUCT_COUNT, " +
-    "o.TOTAL_PRICE, o.ORDER_STATUS, o.ORDER_DATE " +
-    "FROM ORDERS o " +
-    "JOIN MEMBERS m ON o.MEM_ID = m.MEM_ID " +
-    "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
-    "GROUP BY o.ORDER_ID, m.MEM_NAME, o.MEM_ID, o.TOTAL_PRICE, o.ORDER_STATUS, o.ORDER_DATE " +
-    "ORDER BY o.ORDER_ID DESC";
-
-    pstmt = conn.prepareStatement(sql);
-    rs = pstmt.executeQuery();
-
-    while(rs.next()){
+    if (errorMessage != null) {
+%>
+        <tr>
+            <td colspan="8"><%= errorMessage %></td>
+        </tr>
+<%
+    } else if (orderList.size() == 0) {
+%>
+        <tr>
+            <td colspan="8">주문내역이 없습니다.</td>
+        </tr>
+<%
+    } else {
+        for (OrderDTO order : orderList) {
 %>
 
 <tr>
-    <td><%=rs.getString("ORDER_ID") %></td>
-    <td><%=rs.getString("MEM_NAME") %></td>
-    <td><%=rs.getString("MEM_ID") %></td>
+    <td><%= order.getOrderId() %></td>
+    <td><%= order.getMemName() %></td>
+    <td><%= order.getMemId() %></td>
+    <td><%= order.getDisplayProductName() %></td>
+    <td><%= String.format("%,d", order.getTotalPrice()) %>원</td>
+    <td><%= order.getOrderStatus() %></td>
+    <td><%= order.getOrderDate() %></td>
     <td>
-<%
-    String proName = rs.getString("PRO_NAME");
-    int productCount = rs.getInt("PRODUCT_COUNT");
-
-    if (productCount > 1) {
-%>
-        <%=proName %> 외 <%=productCount - 1 %>개
-<%
-    } else {
-%>
-        <%=proName %>
-<%
-    }
-%>
-</td>
-    <td><%=String.format("%,d", rs.getInt("TOTAL_PRICE")) %>원</td>
-    <td><%=rs.getString("ORDER_STATUS") %></td>
-    <td><%=rs.getDate("ORDER_DATE") %></td>
-    <td>
-    <a class="admin-btn small"
-       href="<%=request.getContextPath() %>/admin/orderDetail.jsp?orderId=<%=rs.getInt("ORDER_ID") %>">
-        상세
-    </a>
-</td>
+        <a class="admin-btn small"
+           href="<%= request.getContextPath() %>/admin/orderDetail.jsp?orderId=<%= order.getOrderId() %>">
+            상세
+        </a>
+    </td>
 </tr>
 
 <%
+        }
     }
-
-} catch(Exception e){
-    out.println("<tr><td colspan='12'>주문내역 조회 오류: " + e.getMessage() + "</td></tr>");
-} finally {
-    if(rs != null) rs.close();
-    if(pstmt != null) pstmt.close();
-    if(conn != null) conn.close();
-}
 %>
 
 </table>
 
 </div>
 </body>
-</html>
+</html> -

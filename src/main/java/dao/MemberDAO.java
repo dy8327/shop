@@ -12,6 +12,9 @@ public class MemberDAO {
         this.conn=conn;
     }
 
+    public MemberDAO() {
+    }
+
     public Member login(String memId, String memPw) throws SQLException{
         String sql = "SELECT MEM_ID, MEM_NAME, MEM_ROLE, MEM_GRADE FROM MEMBERS "+
         "WHERE MEM_ID = ? AND MEM_PW = ?"; 
@@ -114,5 +117,23 @@ public String getCustomerKey(String memId) throws SQLException {
                 pstmt.close();
         }
         return memberList;
+    }
+    //아이디 중복체크
+    public boolean existsById(String memId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM MEMBERS WHERE MEM_ID = ?";
+
+        try (
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
+            pstmt.setString(1, memId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+
+        return false;
     }
 }

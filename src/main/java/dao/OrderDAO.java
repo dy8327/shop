@@ -483,4 +483,42 @@ public class OrderDAO {
 
         return detailList;
     }
+    // 관리자 - 회원 주문내역 조회
+    public List<OrderDTO> getAdminOrderList() throws Exception {
+        List<OrderDTO> orderList = new ArrayList<>();
+    
+        String sql =
+            "SELECT " +
+            "o.ORDER_ID, m.MEM_NAME, o.MEM_ID, " +
+            "MIN(d.PRO_NAME) AS PRO_NAME, " +
+            "COUNT(d.PRO_ID) AS PRODUCT_COUNT, " +
+            "o.TOTAL_PRICE, o.ORDER_STATUS, o.ORDER_DATE " +
+            "FROM ORDERS o " +
+            "JOIN MEMBERS m ON o.MEM_ID = m.MEM_ID " +
+            "JOIN ORDER_DETAIL d ON o.ORDER_ID = d.ORDER_ID " +
+            "GROUP BY o.ORDER_ID, m.MEM_NAME, o.MEM_ID, o.TOTAL_PRICE, o.ORDER_STATUS, o.ORDER_DATE " +
+            "ORDER BY o.ORDER_ID DESC";
+    
+        try (
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()
+        ) {
+            while (rs.next()) {
+                OrderDTO order = new OrderDTO();
+    
+                order.setOrderId(rs.getInt("ORDER_ID"));
+                order.setMemName(rs.getString("MEM_NAME"));
+                order.setMemId(rs.getString("MEM_ID"));
+                order.setProName(rs.getString("PRO_NAME"));
+                order.setProductCount(rs.getInt("PRODUCT_COUNT"));
+                order.setTotalPrice(rs.getInt("TOTAL_PRICE"));
+                order.setOrderStatus(rs.getString("ORDER_STATUS"));
+                order.setOrderDate(rs.getString("ORDER_DATE"));
+    
+                orderList.add(order);
+            }
+        }
+    
+        return orderList;
+    }
 }
