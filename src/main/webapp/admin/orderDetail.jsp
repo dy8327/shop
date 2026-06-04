@@ -30,16 +30,10 @@
             location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
         </script>
 <%
-<<<<<<< HEAD
-        return;
-    }
-
-    int orderId = 0;
-=======
     return;
 }
+
 int orderId = 0;
->>>>>>> 313a230f07e4941e4abe8124af448037e82aeb67
 
     try {
         orderId = Integer.parseInt(orderIdStr);
@@ -50,13 +44,10 @@ int orderId = 0;
             location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
         </script>
 <%
-<<<<<<< HEAD
         return;
     }
-=======
-    return;
-}
->>>>>>> 313a230f07e4941e4abe8124af448037e82aeb67
+
+    int orderId = Integer.parseInt(orderIdStr);
 
     OrderDTO order = null;
     List<OrderDetailDTO> detailList = new ArrayList<>();
