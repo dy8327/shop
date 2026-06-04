@@ -21,17 +21,31 @@
         return;
     }
 
-    String orderIdStr = request.getParameter("orderId");
+   String orderIdStr = request.getParameter("orderId");
 
-    if (orderIdStr == null || orderIdStr.trim().equals("")) {
+if (orderIdStr == null || orderIdStr.trim().equals("")) {
 %>
-        <script>
-            alert("잘못된 접근입니다.");
-            location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
-        </script>
+    <script>
+        alert("잘못된 접근입니다.");
+        location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
+    </script>
 <%
-        return;
-    }
+    return;
+}
+
+int orderId = 0;
+
+try{
+    orderId = Integer.parseInt(orderIdStr);
+}catch(NumberFormatException e){
+%>
+    <script>
+        alert("주문번호 형식이 올바르지 않습니다.");
+        location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
+    </script>
+<%
+    return;
+}
 
     int orderId = Integer.parseInt(orderIdStr);
 
