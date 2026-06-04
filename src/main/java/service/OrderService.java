@@ -11,7 +11,7 @@ public class OrderService {
         OrderDAO orderDAO = new OrderDAO(conn);
         return orderDAO.getAdminOrderList();
     }
-
+    //주문 상태 업데이트
 public void updateOrderStatus(
         Connection conn,
         int orderId,
