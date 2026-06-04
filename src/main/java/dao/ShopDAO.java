@@ -60,7 +60,7 @@ public class ShopDAO {
 
         return shop;
     }
-
+    // 제품 삭제
     public void deleteProduct(Connection conn, int proId) throws Exception{
         PreparedStatement pstmt=null;
     
@@ -91,7 +91,7 @@ public class ShopDAO {
                 pstmt.close();
     }
     }
-
+    // 상품 수정
     public void updateProduct(Connection conn, Shop shop) throws Exception{
        
         PreparedStatement pstmt=null;
@@ -137,7 +137,7 @@ public class ShopDAO {
             }
         }
     }
-
+    // 상품 등록
     public void insertProduct(Connection conn, Shop shop, String[] proSizeArr, String[] proColorArr, String[] proStockArr) throws Exception{
 
         PreparedStatement pstmt=null;

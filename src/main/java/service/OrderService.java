@@ -12,7 +12,7 @@ public class OrderService {
         return orderDAO.getAdminOrderList();
     }
 
-    public void updateOrderStatus(
+public void updateOrderStatus(
         Connection conn,
         int orderId,
         String orderStatus,
