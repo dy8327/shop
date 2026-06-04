@@ -21,33 +21,31 @@
         return;
     }
 
-   String orderIdStr = request.getParameter("orderId");
+    String orderIdStr = request.getParameter("orderId");
 
-if (orderIdStr == null || orderIdStr.trim().equals("")) {
+    if (orderIdStr == null || orderIdStr.trim().equals("")) {
 %>
-    <script>
-        alert("잘못된 접근입니다.");
-        location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
-    </script>
+        <script>
+            alert("잘못된 접근입니다.");
+            location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
+        </script>
 <%
-    return;
-}
+        return;
+    }
 
-int orderId = 0;
+    int orderId = 0;
 
-try{
-    orderId = Integer.parseInt(orderIdStr);
-}catch(NumberFormatException e){
+    try {
+        orderId = Integer.parseInt(orderIdStr);
+    } catch (NumberFormatException e) {
 %>
-    <script>
-        alert("주문번호 형식이 올바르지 않습니다.");
-        location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
-    </script>
+        <script>
+            alert("주문번호 형식이 올바르지 않습니다.");
+            location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
+        </script>
 <%
-    return;
-}
-
-    int orderId = Integer.parseInt(orderIdStr);
+        return;
+    }
 
     OrderDTO order = null;
     List<OrderDetailDTO> detailList = new ArrayList<>();
@@ -71,7 +69,7 @@ try{
     } catch (Exception e) {
 %>
         <script>
-            alert("주문 상세 조회 오류: <%=e.getMessage() %>");
+            alert("주문 상세 조회 오류가 발생했습니다.");
             location.href = "<%=request.getContextPath() %>/admin/orderManage.jsp";
         </script>
 <%
@@ -84,7 +82,7 @@ try{
 <head>
 <meta charset="UTF-8">
 <title>주문 상세</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/style.css">
 </head>
 <body>
 
@@ -95,7 +93,6 @@ try{
     <h1>주문 상세</h1>
     <h2>Order Detail</h2>
 
-    <!-- 주문 기본 정보 -->
     <section class="panel">
         <h3>주문 정보</h3>
 
@@ -132,7 +129,6 @@ try{
         </table>
     </section>
 
-    <!-- 배송 정보 -->
     <section class="panel" style="margin-top:24px;">
         <h3>배송 정보</h3>
 
@@ -141,7 +137,7 @@ try{
                 <th>수령인</th>
                 <td><%=order.getReceiverName() %></td>
                 <th>연락처</th>
-                <td><%=order.getReceiverPhone()%></td>
+                <td><%=order.getReceiverPhone() %></td>
             </tr>
 
             <tr>
@@ -165,7 +161,6 @@ try{
         </table>
     </section>
 
-    <!-- 주문 상품 정보 -->
     <section class="panel" style="margin-top:24px;">
         <h3>주문 상품</h3>
 
@@ -183,24 +178,23 @@ try{
 
             <tbody>
             <%
-            for (OrderDetailDTO detail : detailList) {
-        %>
-            <tr>
-                <td><%=detail.getProName() %></td>
-                <td><%=detail.getProSize() %></td>
-                <td><%=detail.getProColor() %></td>
-                <td><%=detail.getQuantity() %>개</td>
-                <td><%=String.format("%,d", detail.getProPrice()) %>원</td>
-                <td><%=String.format("%,d", detail.getSumPrice()) %>원</td>
-            </tr>
-        <%
-            }
-        %>
+                for (OrderDetailDTO detail : detailList) {
+            %>
+                <tr>
+                    <td><%=detail.getProName() %></td>
+                    <td><%=detail.getProSize() %></td>
+                    <td><%=detail.getProColor() %></td>
+                    <td><%=detail.getQuantity() %>개</td>
+                    <td><%=String.format("%,d", detail.getProPrice()) %>원</td>
+                    <td><%=String.format("%,d", detail.getSumPrice()) %>원</td>
+                </tr>
+            <%
+                }
+            %>
             </tbody>
         </table>
     </section>
 
-    <!-- 관리자 주문 처리 -->
     <section class="panel" style="margin-top:24px;">
         <h3>주문 상태 변경</h3>
 
@@ -214,28 +208,27 @@ try{
             <div class="form-row">
                 <label>주문 상태</label>
                 <select name="orderStatus">
-                    <option value="주문완료"
-                        <%="주문완료".equals(order.getOrderStatus()) ? "selected" : "" %>>
+                    <option value="주문완료" <%="주문완료".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         주문완료
                     </option>
 
-                    <option value="배송준비"
-                        <%="배송준비".equals(order.getOrderStatus()) ? "selected" : "" %>>
-                        배송준비
+                    <option value="배송준비중" <%="배송준비중".equals(order.getOrderStatus()) ? "selected" : "" %>>
+                        배송준비중
                     </option>
 
-                    <option value="배송중"
-                        <%="배송중".equals(order.getOrderStatus()) ? "selected" : "" %>>
+                    <option value="배송중" <%="배송중".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         배송중
                     </option>
 
-                    <option value="배송완료"
-                        <%="배송완료".equals(order.getOrderStatus()) ? "selected" : "" %>>
+                    <option value="배송완료" <%="배송완료".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         배송완료
                     </option>
 
-                    <option value="주문취소"
-                        <%="주문취소".equals(order.getOrderStatus()) ? "selected" : "" %>>
+                    <option value="취소요청" <%="취소요청".equals(order.getOrderStatus()) ? "selected" : "" %>>
+                        취소요청
+                    </option>
+
+                    <option value="주문취소" <%="주문취소".equals(order.getOrderStatus()) ? "selected" : "" %>>
                         주문취소
                     </option>
                 </select>
@@ -246,14 +239,20 @@ try{
                 <select name="deliveryCompany">
                     <option value="">택배사 선택</option>
 
-                    <option value="CJ대한통운"
-                        <%="CJ대한통운".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
+                    <option value="CJ대한통운" <%="CJ대한통운".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
                         CJ대한통운
                     </option>
 
-                    <option value="우체국택배"
-                        <%="우체국택배".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
+                    <option value="우체국택배" <%="우체국택배".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
                         우체국택배
+                    </option>
+
+                    <option value="한진택배" <%="한진택배".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
+                        한진택배
+                    </option>
+
+                    <option value="롯데택배" <%="롯데택배".equals(order.getDeliveryCompany()) ? "selected" : "" %>>
+                        롯데택배
                     </option>
                 </select>
             </div>

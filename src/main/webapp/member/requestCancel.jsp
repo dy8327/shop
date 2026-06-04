@@ -6,6 +6,20 @@
 String memId = (String) session.getAttribute("memId");
 String orderId = request.getParameter("orderId");
 
+int orderNo = 0;
+
+try {
+    orderNo = Integer.parseInt(orderId);
+} catch (NumberFormatException e) {
+%>
+<script>
+    alert("주문번호 형식이 올바르지 않습니다.");
+    history.back();
+</script>
+<%
+    return;
+}
+
 if (memId == null) {
 %>
 <script>
@@ -27,7 +41,7 @@ try {
         "AND ORDER_STATUS IN ('주문완료', '배송준비중', '배송중', '배송완료')";
 
     pstmt = conn.prepareStatement(sql);
-    pstmt.setInt(1, Integer.parseInt(orderId));
+    pstmt.setInt(1, orderNo);
     pstmt.setString(2, memId);
 
     int result = pstmt.executeUpdate();

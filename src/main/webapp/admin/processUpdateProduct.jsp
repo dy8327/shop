@@ -6,17 +6,33 @@
 <%@ include file="../dbconn.jsp" %>
 <%
     request.setCharacterEncoding("UTF-8");
-    
-    int proId=Integer.parseInt(request.getParameter("proId"));
-    String proName=request.getParameter("proName");
-    int proPrice=Integer.parseInt(request.getParameter("proPrice"));
-    String proSize=request.getParameter("proSize");
-    int proStock=Integer.parseInt(request.getParameter("proStock"));
-    String proColor=request.getParameter("proColor");
-    String proCont=request.getParameter("proCont");
-    String proCategory=request.getParameter("proCategory");
-    String oldFilename=request.getParameter("oldFilename");
-    int proOpId=Integer.parseInt(request.getParameter("proOpId"));
+
+int proId = 0;
+int proPrice = 0;
+int proStock = 0;
+int proOpId = 0;
+
+try{
+    proId = Integer.parseInt(request.getParameter("proId"));
+    proPrice = Integer.parseInt(request.getParameter("proPrice"));
+    proStock = Integer.parseInt(request.getParameter("proStock"));
+    proOpId = Integer.parseInt(request.getParameter("proOpId"));
+}catch(NumberFormatException e){
+%>
+    <script>
+        alert("상품 정보의 숫자 형식이 올바르지 않습니다.");
+        history.back();
+    </script>
+<%
+    return;
+}
+
+String proName = request.getParameter("proName");
+String proSize = request.getParameter("proSize");
+String proColor = request.getParameter("proColor");
+String proCont = request.getParameter("proCont");
+String proCategory = request.getParameter("proCategory");
+String oldFilename = request.getParameter("oldFilename");
 
     String filename=oldFilename;
 

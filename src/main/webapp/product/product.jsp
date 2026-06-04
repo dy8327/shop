@@ -8,6 +8,21 @@
   String proId = request.getParameter("proId");
   String cartResult = request.getParameter("cart");
   
+  int productId = 0;
+
+  try {
+    productId = Integer.parseInt(proId);
+  } catch (NumberFormatException e) {
+  %>
+  <script>
+    alert("상품번호 형식이 올바르지 않습니다.");
+    history.back();
+  </script>
+  <%
+    return;
+  }
+
+
   PreparedStatement pstmt = null;
   ResultSet rs = null;
   
@@ -29,7 +44,7 @@
     "FROM PRODUCTS WHERE PRO_ID = ?";
     
     pstmt = conn.prepareStatement(sql);
-    pstmt.setInt(1, Integer.parseInt(proId));
+    pstmt.setInt(1, productId);
     rs = pstmt.executeQuery();
     
     if (rs.next()) {
@@ -46,7 +61,7 @@
     // 2. 옵션 상세 정보 조회 (OPTION_ID, 재고 포함)
     String optSql = "SELECT OPTION_ID, PRO_COLOR, PRO_SIZE, PRO_STOCK FROM PRO_OPTION WHERE PRO_ID = ?";
     PreparedStatement optStmt = conn.prepareStatement(optSql);
-    optStmt.setInt(1, Integer.parseInt(proId));
+    optStmt.setInt(1, productId);
     ResultSet optRs = optStmt.executeQuery();
     
     while(optRs.next()) {

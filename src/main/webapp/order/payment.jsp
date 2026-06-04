@@ -31,7 +31,19 @@ if (orderIdParam == null || orderIdParam.equals("")) {
     return;
 }
 
-int orderId = Integer.parseInt(orderIdParam);
+int orderId = 0;
+
+try {
+    orderId = Integer.parseInt(orderIdParam);
+} catch (NumberFormatException e) {
+%>
+<script>
+    alert("주문번호 형식이 올바르지 않습니다.");
+    location.href = "<%= request.getContextPath() %>/product/cart.jsp";
+</script>
+<%
+    return;
+}
 
 OrderDTO order = null;
 String customerKey = "";

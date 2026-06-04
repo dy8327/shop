@@ -30,7 +30,19 @@ if (cartIdParam == null || cartIdParam.equals("")) {
     return;
 }
 
-int cartId = Integer.parseInt(cartIdParam);
+int cartId = 0;
+
+try {
+    cartId = Integer.parseInt(cartIdParam);
+} catch (NumberFormatException e) {
+%>
+    <script>
+        alert("장바구니 번호 형식이 올바르지 않습니다.");
+        history.back();
+    </script>
+<%
+    return;
+}
 
 try {
     CartDAO dao = new CartDAO(conn);

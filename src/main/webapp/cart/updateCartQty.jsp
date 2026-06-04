@@ -21,7 +21,8 @@
     String cartIdStr = request.getParameter("cartId");
     String action = request.getParameter("action");
 
-    if (cartIdStr == null || action == null || cartIdStr.equals("") || action.equals("")) {
+    if (cartIdStr == null || action == null ||
+        cartIdStr.trim().equals("") || action.trim().equals("")) {
 %>
         <script>
             alert("잘못된 요청입니다.");
@@ -31,7 +32,19 @@
         return;
     }
 
-    int cartId = Integer.parseInt(cartIdStr);
+    int cartId = 0;
+
+    try {
+        cartId = Integer.parseInt(cartIdStr.trim());
+    } catch (NumberFormatException e) {
+%>
+        <script>
+            alert("장바구니 번호 형식이 올바르지 않습니다.");
+            history.back();
+        </script>
+<%
+        return;
+    }
 
     try {
         CartDAO dao = new CartDAO(conn);
@@ -56,8 +69,10 @@
 
     } catch (Exception e) {
         out.println("수량 변경 오류: " + e.getMessage());
+
     } finally {
-        if (conn != null) 
-            conn.close(); 
+        if (conn != null) {
+            conn.close();
+        }
     }
 %>

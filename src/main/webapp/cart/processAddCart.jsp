@@ -33,9 +33,23 @@
         return;
     }
 
-    int proId = Integer.parseInt(proIdStr);
-    int optionId = Integer.parseInt(optionIdStr);
-    int cartQty = Integer.parseInt(quantityStr);
+int proId = 0;
+int optionId = 0;
+int cartQty = 0;
+
+try {
+    proId = Integer.parseInt(proIdStr);
+    optionId = Integer.parseInt(optionIdStr);
+    cartQty = Integer.parseInt(quantityStr);
+} catch (NumberFormatException e) {
+%>
+    <script>
+        alert("상품 수량 또는 옵션 정보의 숫자 형식이 올바르지 않습니다.");
+        history.back();
+    </script>
+<%
+    return;
+}
 
     if (cartQty < 1) {
         cartQty = 1;
